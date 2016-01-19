@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/domov" android:icon="@drawable/filmi_home"
+            android:title="Domov" />
+        <item android:id="@+id/filmi" android:icon="@drawable/filmi_video"
+            android:title="Filmi" />
+        <item android:id="@+id/seznami" android:icon="@drawable/filmi_heart"
+            android:title="Seznami" />
+        <item android:id="@+id/profil" android:icon="@drawable/filmi_profile"
+            android:title="Profil" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item android:id="@+id/nav_share" android:icon="@android:drawable/ic_menu_share"
+                android:title="Share" />
+            <item android:id="@+id/nav_send" android:icon="@android:drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+</menu>
