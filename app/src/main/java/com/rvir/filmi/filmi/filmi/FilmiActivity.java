@@ -24,6 +24,7 @@ public class FilmiActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Popularni"));
         tabLayout.addTab(tabLayout.newTab().setText("Kategorije"));
+        tabLayout.addTab(tabLayout.newTab().setText("Iskanje"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);

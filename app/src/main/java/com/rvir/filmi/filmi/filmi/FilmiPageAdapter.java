@@ -22,6 +22,9 @@ public class FilmiPageAdapter extends FragmentStatePagerAdapter {
             case 1:
                 FragmentKategorije tab2 = new FragmentKategorije();
                 return tab2;
+            case 2:
+                FragmentIskanje tab3 = new FragmentIskanje();
+                return tab3;
             default:
                 return null;
         }
