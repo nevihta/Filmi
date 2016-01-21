@@ -3,6 +3,7 @@
     package="com.rvir.filmi.filmi" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,6 +23,11 @@
         <activity
             android:name=".filmi.FilmiActivity"
             android:label="Filmi"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".film.FilmActivity"
+            android:label="@string/title_activity_film"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>

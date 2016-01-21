@@ -28,6 +28,8 @@
 
         <Button
             android:layout_width="0dip"
+            android:drawableTop="@drawable/filmi_heart"
+            android:text="Test2"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#e58c38"

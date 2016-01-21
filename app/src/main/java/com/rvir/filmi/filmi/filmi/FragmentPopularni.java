@@ -1,6 +1,7 @@
 package com.rvir.filmi.filmi.filmi;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,12 +14,13 @@ import android.widget.ListView;
 import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.filmi.R;
 import com.rvir.filmi.filmi.ServiceHandler;
+import com.rvir.filmi.filmi.film.FilmActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class FragmentPopularni extends Fragment {
-    private ArrayList<com.rvir.filmi.baza.beans.Film> popularniFilmi = null;
+    private ArrayList<Film> popularniFilmi = null;
     private View view = null;
 
     @Override
@@ -35,7 +37,7 @@ public class FragmentPopularni extends Fragment {
         return view;
     }
 
-    private class GetJSONPopularniTask extends AsyncTask<String, Void, ArrayList<com.rvir.filmi.baza.beans.Film>> {
+    private class GetJSONPopularniTask extends AsyncTask<String, Void, ArrayList<Film>> {
         private ProgressDialog pDialog;
 
         @Override
@@ -49,7 +51,7 @@ public class FragmentPopularni extends Fragment {
         }
 
         @Override
-        protected ArrayList<com.rvir.filmi.baza.beans.Film> doInBackground(String... urls) {
+        protected ArrayList<Film> doInBackground(String... urls) {
             PopularniJSONParser popularniParser = new PopularniJSONParser();
             try {
                 String input = new ServiceHandler().downloadURL(urls[0]);
@@ -63,7 +65,7 @@ public class FragmentPopularni extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<com.rvir.filmi.baza.beans.Film> result) {
+        protected void onPostExecute(ArrayList<Film> result) {
             if(pDialog.isShowing())
                 pDialog.dismiss();
             //izpis rezultatov
@@ -75,11 +77,11 @@ public class FragmentPopularni extends Fragment {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        // int idFilma = seznam.get(position).getId();
+                        int idFilma = popularniFilmi.get(position).getIdFilmApi();
 
-                        //  Intent myIntent = new Intent(view.getContext(), FilmActivity.class);
-                        //  myIntent.putExtra("id", (int) idFilma);
-                        //  startActivity(myIntent);
+                        Intent myIntent = new Intent(view.getContext(), FilmActivity.class);
+                        myIntent.putExtra("id", (int) idFilma);
+                        startActivity(myIntent);
 
                     }
                 });
