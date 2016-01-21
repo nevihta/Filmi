@@ -18,7 +18,7 @@ public class FragmentIskanje extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view =  inflater.inflate(R.layout.content_filmi_fragment_iskanje, container, false);
-
+/*
         Film film = new Film();
         film.setIgralci("igralec 1, Igralec 2");
         film.setMojaOcena("5");
@@ -38,7 +38,7 @@ public class FragmentIskanje extends Fragment {
         datasource.dodajFilm(film);
         Film f = datasource.pridobiFilm(1);
         Log.i("test filma", f.getNaslov());
-
+*/
         return view;
 
     }
