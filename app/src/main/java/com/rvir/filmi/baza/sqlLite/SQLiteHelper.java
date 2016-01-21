@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "FilmiDB";
 
     public static final String TABELA_FILMI = "filmi";
@@ -15,22 +15,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String ID_FILMA_API = "id_filma_api";
     public static final String NASLOV= "naslov";
     public static final String LETO_IZIDA = "leto_izida";
+    public static final String KATEGORIJE = "kategorije";
     public static final String IGRALCI = "igralci";
     public static final String REZISERJI = "reziserji";
     public static final String OPIS= "opis";
     public static final String OCENA = "ocena";
     public static final String MOJA_OCENA = "mojaOcena";
     public static final String SLIKA = "urlDoSlike";
-
-    public static final String TABELA_KATEGORIJA = "kategorije";
-    public static final String ID_KATEGORIJE= "id_kategorije";
-    public static final String ID_KATEGORIJE_API = "id_kategorije_api";
-    public static final String NAZIV = "naziv";
-
-    public static final String TABELA_KAT_FILM = "kategorije_filmi";
-    public static final String ID_KAT_FILM = "id_kat_film";
-    public static final String TK_ID_KAT= "tk_id_kat";
-    public static final String TK_ID_FILM_K = "tk_id_film";
 
     public static final String TABELA_KRITIKE = "kritike";
     public static final String ID_KRITIKE= "id_kritike";
@@ -61,6 +52,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 ID_FILMA_API+" INTEGER, "+
                 NASLOV+" TEXT, "+
                 LETO_IZIDA+" INTEGER, "+
+                KATEGORIJE + " TEXT, " +
                 IGRALCI+" TEXT, "+
                 REZISERJI + " TEXT, " +
                 OPIS+ " TEXT, "+
@@ -69,20 +61,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 SLIKA + " TEXT) ";
 
         db.execSQL(CREATE_FILMI_TABLE);
-
-        String CREATE_KATEGORIJA_TABLE = "CREATE TABLE "+ TABELA_KATEGORIJA +" ( " +
-                ID_KATEGORIJE+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ID_KATEGORIJE_API+" INTEGER, "+
-                NAZIV +" TEXT) ";
-
-        db.execSQL(CREATE_KATEGORIJA_TABLE);
-
-        String CREATE_KAT_FILM_TABLE = "CREATE TABLE "+ TABELA_KAT_FILM +" ( " +
-                ID_KAT_FILM+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                TK_ID_KAT+" INTEGER, "+
-                TK_ID_FILM_K+" INTEGER) ";
-
-        db.execSQL(CREATE_KAT_FILM_TABLE);
 
         String CREATE_KRITIKE_TABLE = "CREATE TABLE "+ TABELA_KRITIKE +" ( " +
                 ID_KRITIKE+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -119,12 +97,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("DROP TABLE IF EXISTS "+ TABELA_KAT_FILM);
         db.execSQL("DROP TABLE IF EXISTS "+ TABELA_SEZNAMI);
         db.execSQL("DROP TABLE IF EXISTS "+ TABELA_TIP_SEZNAM);
-        db.execSQL("DROP TABLE IF EXISTS "+ TABELA_FILMI);
-        db.execSQL("DROP TABLE IF EXISTS "+ TABELA_KATEGORIJA);
         db.execSQL("DROP TABLE IF EXISTS "+ TABELA_KRITIKE);
+        db.execSQL("DROP TABLE IF EXISTS "+ TABELA_FILMI);
 
         this.onCreate(db);
     }

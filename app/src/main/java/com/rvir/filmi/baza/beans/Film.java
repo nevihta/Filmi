@@ -8,13 +8,13 @@ public class Film {
     private int idFilmApi;
     private String Naslov;
     private int letoIzida;
+    private String kategorije;
     private String igralci;
     private String reziserji;
     private String opis;
     private String ocena;
     private String mojaOcena;
     private String urlDoSlike;
-    private ArrayList<Kategorija> kategorije;
     private ArrayList<Kritika> kritike;
 
     public Film(){
@@ -86,11 +86,11 @@ public class Film {
         this.ocena = ocena;
     }
 
-    public ArrayList<Kategorija> getKategorije() {
+    public String getKategorije() {
         return kategorije;
     }
 
-    public void setKategorije(ArrayList<Kategorija> kategorije) {
+    public void setKategorije(String kategorije) {
         this.kategorije = kategorije;
     }
 

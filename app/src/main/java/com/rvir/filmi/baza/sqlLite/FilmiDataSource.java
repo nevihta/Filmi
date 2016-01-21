@@ -8,11 +8,6 @@ import android.database.SQLException;
 import android.util.Log;
 
 import com.rvir.filmi.baza.beans.Film;
-import com.rvir.filmi.baza.beans.Kategorija;
-import com.rvir.filmi.baza.beans.Kritika;
-
-import java.util.ArrayList;
-
 
 public class FilmiDataSource {
 
@@ -20,7 +15,7 @@ public class FilmiDataSource {
     private SQLiteHelper dbHelper;
 
     private static final String[] FILM_COLUMNS = {SQLiteHelper.ID_FILMA, SQLiteHelper.ID_FILMA_API, SQLiteHelper.NASLOV, SQLiteHelper.LETO_IZIDA,
-             SQLiteHelper.IGRALCI, SQLiteHelper.REZISERJI, SQLiteHelper.OPIS, SQLiteHelper.OCENA, SQLiteHelper.MOJA_OCENA, SQLiteHelper.SLIKA};
+             SQLiteHelper.KATEGORIJE, SQLiteHelper.IGRALCI, SQLiteHelper.REZISERJI, SQLiteHelper.OPIS, SQLiteHelper.OCENA, SQLiteHelper.MOJA_OCENA, SQLiteHelper.SLIKA};
 
     public FilmiDataSource(Context context){
         dbHelper = new SQLiteHelper(context);
@@ -54,7 +49,6 @@ public class FilmiDataSource {
         }
 
         //pridobi kritike
-        //pridobi kategorije
 
 
         return film;
@@ -66,6 +60,7 @@ public class FilmiDataSource {
         values.put(SQLiteHelper.ID_FILMA_API, film.getIdFilmApi());
         values.put(SQLiteHelper.NASLOV, film.getNaslov());
         values.put(SQLiteHelper.LETO_IZIDA, film.getLetoIzida());
+        values.put(SQLiteHelper.KATEGORIJE, film.getKategorije());
         values.put(SQLiteHelper.IGRALCI, film.getIgralci());
         values.put(SQLiteHelper.REZISERJI, film.getReziserji());
         values.put(SQLiteHelper.OPIS, film.getOpis());
@@ -89,12 +84,13 @@ public class FilmiDataSource {
         film.setIdFilmApi(Integer.parseInt(cursor.getString(1)));
         film.setNaslov(cursor.getString(2));
         film.setLetoIzida(Integer.parseInt(cursor.getString(3)));
-        film.setIgralci(cursor.getString(4));
-        film.setReziserji(cursor.getString(5));
-        film.setOpis(cursor.getString(6));
-        film.setOcena(cursor.getString(7));
-        film.setMojaOcena(cursor.getString(8));
-        film.setUrlDoSlike(cursor.getString(9));
+        film.setKategorije(cursor.getString(4));
+        film.setIgralci(cursor.getString(5));
+        film.setReziserji(cursor.getString(6));
+        film.setOpis(cursor.getString(7));
+        film.setOcena(cursor.getString(8));
+        film.setMojaOcena(cursor.getString(9));
+        film.setUrlDoSlike(cursor.getString(10));
 
         return film;
     }
