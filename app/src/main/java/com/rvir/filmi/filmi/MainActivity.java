@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.rvir.filmi.filmi.filmi.FilmiActivity;
+import com.rvir.filmi.filmi.seznami.SeznamiActivity;
 import com.rvir.filmi.filmi.uporabnik.Login;
 
 public class MainActivity extends AppCompatActivity
@@ -50,6 +51,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), Login.class);
+                startActivity(i);
+            }
+        });
+
+        Button seznami = (Button) findViewById(R.id.buttonSeznami);
+        seznami.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), SeznamiActivity.class);
                 startActivity(i);
             }
         });

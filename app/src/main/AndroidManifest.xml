@@ -38,6 +38,10 @@
             android:label="@string/title_activity_registracija"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity android:name=".seznami.SeznamiActivity"
+            android:label="@string/title_activity_seznami"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

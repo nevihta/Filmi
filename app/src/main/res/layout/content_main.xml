@@ -50,11 +50,13 @@
             android:layout_margin="10dp" />
 
         <Button
+            android:id="@+id/buttonSeznami"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#303F9F"
-            android:layout_margin="10dp" />
+            android:layout_margin="10dp"
+            android:text="Moji seznami filmov"/>
     </LinearLayout>
 
     <LinearLayout
