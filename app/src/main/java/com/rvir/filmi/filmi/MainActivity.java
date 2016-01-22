@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.rvir.filmi.filmi.filmi.FilmiActivity;
+import com.rvir.filmi.filmi.uporabnik.Login;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +41,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), FilmiActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button prijava = (Button) findViewById(R.id.buttonPrijava);
+        prijava.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), Login.class);
                 startActivity(i);
             }
         });

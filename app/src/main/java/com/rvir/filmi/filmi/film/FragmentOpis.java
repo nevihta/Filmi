@@ -2,19 +2,27 @@ package com.rvir.filmi.filmi.film;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
 import com.rvir.filmi.filmi.R;
 import com.rvir.filmi.filmi.ServiceHandler;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,8 +86,18 @@ public class FragmentOpis extends Fragment {
             //izpis rezultatov
             if(result!=null) {
                //izpis
-                TextView textView = ( TextView ) view.findViewById(R.id.textView);
+                ImageView imageView = (ImageView) view.findViewById(R.id.poster);
+                Picasso.with(getActivity().getBaseContext())
+                        .load(film.getUrlDoSlike())
+                        .resize(150, 150)
+                        .into(imageView);
+                TextView textView = ( TextView ) view.findViewById(R.id.title);
+                textView.setText(film.getNaslov());
+                textView = ( TextView ) view.findViewById(R.id.opis);
                 textView.setText(film.getOpis());
+
+                //video =/
+
             }
 
         }
