@@ -37,7 +37,7 @@ public class FilmJSONParser {
                 JSONObject jObject = jArray.getJSONObject(i);
                 kategorije+=jObject.getString("name")+", ";
             }
-            film.setKategorije(kategorije); System.out.println(kategorije);
+            film.setKategorije(kategorije.substring(0, kategorije.length()-2)); System.out.println(kategorije);
 
             //video
             JSONArray jArray2 = jObj.getJSONObject("videos").getJSONArray("results");
@@ -57,33 +57,31 @@ public class FilmJSONParser {
     }
 
     public Film parseIgralciRezija(String inputString){
+        System.out.println("v igralci/rezija: ");
         String igralci="";
         String rezija="";
         try {
             JSONObject jObj = new JSONObject(inputString);
-            film.setIdFilmApi(jObj.getInt("id")); System.out.println(film.getIdFilmApi());
-            film.setNaslov(jObj.getString("title")); System.out.println(film.getNaslov());
-            film.setOpis(jObj.getString("overview")); System.out.println(film.getOpis());
-            film.setUrlDoSlike("http://image.tmdb.org/t/p/w500" + jObj.getString("poster_path")); System.out.println(film.getUrlDoSlike());
-            film.setOcena(jObj.getString("vote_average")); System.out.println(film.getOcena());
-            film.setLetoIzida(Integer.parseInt(jObj.getString("release_date").substring(0, 3))); System.out.println(film.getLetoIzida());
 
             JSONArray jArray = jObj.getJSONArray("cast");
             for(int i=0; i < jArray.length() && i < 6; i++) {
                 JSONObject jObject = jArray.getJSONObject(i);
-                igralci+=jObject.getString("name")+" ";
+                igralci+=jObject.getString("name")+", ";
             }
-            film.setIgralci(igralci);
+            film.setIgralci(igralci.substring(0, igralci.length()-2));
 
             //mogoce se direktorja?
             JSONArray jArray2 = jObj.getJSONArray("crew");
-            for(int j=0; j < jArray2.length(); j++) {
+            int stReziserjev = 0;
+            for(int j=0; j < jArray2.length() && stReziserjev < 3; j++) {
                 JSONObject jObject2 = jArray2.getJSONObject(j);
-                if(jObject2.getString("job").equals("producer"))
-                    rezija+=jObject2.getString("name")+" ";
+                if(jObject2.getString("job").equals("Producer")) {
+                    rezija += jObject2.getString("name") + ", ";
+                    stReziserjev+=1;
+                }
 
             }
-            film.setReziserji(rezija);
+            film.setReziserji(rezija.substring(0,rezija.length()-2));
             //film.setTrailer
 
         } catch (JSONException e) {

@@ -29,6 +29,10 @@ import java.util.ArrayList;
 
 public class FragmentOpis extends Fragment {
     private Film film;
+    private ImageView priljubljeno;
+    private ImageView ogledano;
+    private ImageView neOgledano;
+    private ImageView wishlist;
     View view = null;
 
     @Override
@@ -43,6 +47,95 @@ public class FragmentOpis extends Fragment {
 
         GetJSONOpisTask task = new GetJSONOpisTask();
         task.execute(url1, urlIgralci);
+
+        //add favourites
+        //manjka: if film ze na seznamu, slika x, else slika y
+        priljubljeno = (ImageView) view.findViewById(R.id.fave);
+        if(idFilma==140607){
+            priljubljeno.setImageResource(R.drawable.filmi_heart);
+            priljubljeno.setTag("fave");
+        }
+        else{
+            priljubljeno.setImageResource(R.drawable.filmi_heart_empty);
+            priljubljeno.setTag("notFave");
+        }
+
+        //listener - odstrani ali doda na seznam + spremeni ikono
+        priljubljeno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               if(priljubljeno.getTag().equals("fave")){
+                   priljubljeno.setImageResource(R.drawable.filmi_heart_empty);
+                   priljubljeno.setTag("notFave");
+               }
+                else{
+                   priljubljeno.setImageResource(R.drawable.filmi_heart);
+                   priljubljeno.setTag("fave");
+               }
+            }
+        });
+
+        //ze ogledano - manjka: ce na listi potem x visible, y invis, drugace obratno
+        ogledano = (ImageView) view.findViewById(R.id.watched);
+        neOgledano = (ImageView) view.findViewById(R.id.notWatched);
+
+        if(idFilma==140607){
+            neOgledano.setVisibility(View.GONE);
+        }
+        else{
+            ogledano.setVisibility(View.INVISIBLE);
+        }
+
+        //listener - samo, ce doda na seznam ogledanih
+        neOgledano.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               neOgledano.setVisibility(View.GONE);
+                ogledano.setVisibility(View.VISIBLE);
+            }
+        });
+
+        //wishlist - ce je na seznamu ogledanih, ne sme biti prikazano!
+        wishlist = (ImageView) view.findViewById(R.id.wish);
+        if(idFilma==12345){
+            wishlist.setVisibility(View.GONE);
+        }else{
+            //ce je na wishlisti ali ne
+            if(idFilma==140607){
+                wishlist.setImageResource(R.drawable.filmi_star);
+                wishlist.setTag("wish");
+            }
+            else{
+                wishlist.setImageResource(R.drawable.filmi_star_empty);
+                wishlist.setTag("notWish");
+            }
+
+        }
+
+        //listener - odstrani ali doda na seznam + spremeni ikono
+        wishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(wishlist.getTag().equals("wish")){
+                    wishlist.setImageResource(R.drawable.filmi_star_empty);
+                    wishlist.setTag("notWish");
+                }
+                else{
+                    wishlist.setImageResource(R.drawable.filmi_star);
+                    wishlist.setTag("wish");
+                }
+            }
+        });
+
+        //recommend to friend
+        ImageView share = (ImageView) view.findViewById(R.id.share);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //send recommendation
+            }
+        });
+
 
         return view;
 
@@ -89,10 +182,20 @@ public class FragmentOpis extends Fragment {
                 ImageView imageView = (ImageView) view.findViewById(R.id.poster);
                 Picasso.with(getActivity().getBaseContext())
                         .load(film.getUrlDoSlike())
-                        .resize(150, 150)
+                        .resize(170,240)
                         .into(imageView);
                 TextView textView = ( TextView ) view.findViewById(R.id.title);
                 textView.setText(film.getNaslov());
+                textView = ( TextView ) view.findViewById(R.id.categories);
+                textView.setText(film.getKategorije());
+                textView = ( TextView ) view.findViewById(R.id.year);
+                textView.setText(""+film.getLetoIzida());
+                textView = ( TextView ) view.findViewById(R.id.ocena);
+                textView.setText(""+film.getOcena());
+                textView = ( TextView ) view.findViewById(R.id.rezija); System.out.println("kat: " + film.getIgralci());
+                textView.setText(film.getReziserji());
+                textView = ( TextView ) view.findViewById(R.id.igralci);
+                textView.setText(film.getIgralci());
                 textView = ( TextView ) view.findViewById(R.id.opis);
                 textView.setText(film.getOpis());
 
