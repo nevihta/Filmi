@@ -22,6 +22,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String OCENA = "ocena";
     public static final String MOJA_OCENA = "mojaOcena";
     public static final String SLIKA = "urlDoSlike";
+    public static final String VIDEO = "urlDoVidea";
 
     public static final String TABELA_KRITIKE = "kritike";
     public static final String ID_KRITIKE= "id_kritike";
@@ -58,7 +59,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 OPIS+ " TEXT, "+
                 OCENA + " TEXT, " +
                 MOJA_OCENA + " TEXT, " +
-                SLIKA + " TEXT) ";
+                SLIKA + " TEXT, " +
+                VIDEO + " TEXT) ";
 
         db.execSQL(CREATE_FILMI_TABLE);
 

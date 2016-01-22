@@ -3,14 +3,27 @@ package com.rvir.filmi.baza.beans;
 
 public class Kritika {
 
+    @com.google.gson.annotations.SerializedName("id_kritike")
     private int idKritike;
+    @com.google.gson.annotations.SerializedName("id")
     private String idKritikaApi;
+    @com.google.gson.annotations.SerializedName("besedilo")
     private String besedilo;
+    @com.google.gson.annotations.SerializedName("avtor")
     private String avtor;
+    @com.google.gson.annotations.SerializedName("tk_id_filma")
     private int tkIdFilma;
 
     public Kritika() {
 
+    }
+
+    public Kritika(int id_kritike, String id, String besedilo, String avtor, int tk_id_filma){
+        this.idKritike=id_kritike;
+        this.idKritikaApi=id;
+        this.besedilo=besedilo;
+        this.avtor=avtor;
+        this.tkIdFilma=tk_id_filma;
     }
 
     public int getIdKritike() {

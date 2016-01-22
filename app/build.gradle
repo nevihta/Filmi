@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 'Google Inc.:Google APIs:23'
     buildToolsVersion "23.0.1"
 
     defaultConfig {
@@ -27,4 +27,7 @@ dependencies {
     compile 'com.android.support:design:23.0.1'
     compile files('libs/volley.jar')
     compile files('libs/picasso-2.5.2.jar')
+    compile 'com.google.code.gson:gson:2.2.2'
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.microsoft.azure:azure-mobile-services-android-sdk:2.0.2+'
 }

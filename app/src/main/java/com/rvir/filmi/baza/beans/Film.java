@@ -15,6 +15,7 @@ public class Film {
     private String ocena;
     private String mojaOcena;
     private String urlDoSlike;
+    private String urlVideo;
     private ArrayList<Kritika> kritike;
 
     public Film(){
@@ -116,5 +117,13 @@ public class Film {
 
     public void setMojaOcena(String mojaOcena) {
         this.mojaOcena = mojaOcena;
+    }
+
+    public String getUrlVideo() {
+        return urlVideo;
+    }
+
+    public void setUrlVideo(String urlVideo) {
+        this.urlVideo = urlVideo;
     }
 }

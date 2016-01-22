@@ -15,7 +15,8 @@ public class FilmiDataSource {
     private SQLiteHelper dbHelper;
 
     private static final String[] FILM_COLUMNS = {SQLiteHelper.ID_FILMA, SQLiteHelper.ID_FILMA_API, SQLiteHelper.NASLOV, SQLiteHelper.LETO_IZIDA,
-             SQLiteHelper.KATEGORIJE, SQLiteHelper.IGRALCI, SQLiteHelper.REZISERJI, SQLiteHelper.OPIS, SQLiteHelper.OCENA, SQLiteHelper.MOJA_OCENA, SQLiteHelper.SLIKA};
+             SQLiteHelper.KATEGORIJE, SQLiteHelper.IGRALCI, SQLiteHelper.REZISERJI, SQLiteHelper.OPIS, SQLiteHelper.OCENA, SQLiteHelper.MOJA_OCENA,
+             SQLiteHelper.SLIKA, SQLiteHelper.VIDEO};
 
     public FilmiDataSource(Context context){
         dbHelper = new SQLiteHelper(context);
@@ -67,6 +68,7 @@ public class FilmiDataSource {
         values.put(SQLiteHelper.OCENA, film.getOcena());
         values.put(SQLiteHelper.MOJA_OCENA, film.getMojaOcena());
         values.put(SQLiteHelper.SLIKA, film.getUrlDoSlike());
+        values.put(SQLiteHelper.VIDEO, film.getUrlVideo());
 
         database.insert(SQLiteHelper.TABELA_FILMI, null, values);
    }
@@ -91,6 +93,7 @@ public class FilmiDataSource {
         film.setOcena(cursor.getString(8));
         film.setMojaOcena(cursor.getString(9));
         film.setUrlDoSlike(cursor.getString(10));
+        film.setUrlVideo(cursor.getString(11));
 
         return film;
     }

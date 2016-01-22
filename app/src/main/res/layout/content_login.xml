@@ -10,19 +10,90 @@
 
     <TextView android:text="Login" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textview"
+        android:id="@+id/textLogin"
         android:textSize="35dp"
+        android:paddingTop="20dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView android:text="Uporabniško ime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textUpIme"
+        android:layout_below="@+id/textLogin"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:paddingTop="70dp"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:paddingStart="10dp"
+        android:width="250dp"
+        android:elegantTextHeight="true"
+        android:layout_below="@+id/textUpIme"
+        android:layout_centerHorizontal="true"
+        android:password="false" />
+
+    <TextView android:text="Geslo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textGeslo"
+        android:layout_below="@+id/editText"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:paddingTop="10dp"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editGeslo"
+        android:paddingStart="10dp"
+        android:width="250dp"
+        android:elegantTextHeight="true"
+        android:layout_below="@+id/textGeslo"
+        android:layout_centerHorizontal="true"
+        android:password="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Registracija"
-        android:id="@+id/registracijaButton"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/textview" />
+        android:text="Prijava"
+        android:id="@+id/prijavaButton"
+        android:background="#303F9F"
+        android:layout_below="@+id/editGeslo"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="71dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Še niste registrirani?"
+            android:id="@+id/textViewRegistracija"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registracija"
+            android:textColor="#303F9F"
+            android:id="@+id/registracijaButton"
+            android:layout_toEndOf="@+id/textViewRegistracija"
+            android:paddingStart="10dp"
+            android:clickable="true"
+            />
+    </LinearLayout>
 
 
 
