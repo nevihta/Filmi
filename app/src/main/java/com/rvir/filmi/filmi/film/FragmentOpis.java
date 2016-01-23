@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.VideoView;
 
 import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
+import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
 import com.rvir.filmi.filmi.R;
 import com.rvir.filmi.filmi.ServiceHandler;
 import com.squareup.picasso.Picasso;
@@ -33,25 +35,68 @@ public class FragmentOpis extends Fragment {
     private ImageView ogledano;
     private ImageView neOgledano;
     private ImageView wishlist;
+    private FilmiDataSource filmids;
+    private SeznamiDataSource seznamids;
+    Boolean baza;
+    int id=0;
+
     View view = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view =  inflater.inflate(R.layout.content_film_fragment_opis, container, false);
-        int idFilma = getActivity().getIntent().getExtras().getInt("id");
+        final int idFilma = getActivity().getIntent().getExtras().getInt("id");
         System.out.println(idFilma);
 
-        String url1 = "https://api.themoviedb.org/3/movie/"+idFilma+"?api_key=be86b39865e582aa63d877d88266bcfc&append_to_response=videos";
-        String urlIgralci = "https://api.themoviedb.org/3/movie/"+idFilma+"/credits?api_key=be86b39865e582aa63d877d88266bcfc";
+        filmids = new FilmiDataSource(getContext());
+        seznamids = new SeznamiDataSource(getContext());
 
-        GetJSONOpisTask task = new GetJSONOpisTask();
-        task.execute(url1, urlIgralci);
+        String seznam;
+        Boolean wish=false;
+        Boolean ogledan=false;
+        Boolean priljubljen=false;
+
+        baza=true;
+
+        seznamids.open();
+        filmids.open();
+        film=filmids.pridobiFilm(idFilma);
+
+        if(film == null){
+            baza=false;
+            Log.i("film", "ni ga v bazi");
+            String url1 = "https://api.themoviedb.org/3/movie/"+idFilma+"?api_key=be86b39865e582aa63d877d88266bcfc&append_to_response=videos";
+            String urlIgralci = "https://api.themoviedb.org/3/movie/"+idFilma+"/credits?api_key=be86b39865e582aa63d877d88266bcfc";
+
+            GetJSONOpisTask task = new GetJSONOpisTask();
+            task.execute(url1, urlIgralci);
+        }
+        else
+        {
+            napolniView(film);
+            id=film.getIdFilma();
+
+            ArrayList<String> seznami = seznamids.vrniSeznameNaKaterihJeFilm(id);
+            Log.i("seznami", seznami.size() + "");
+
+            for(int i=0; i<seznami.size(); i++){
+                seznam=seznami.get(i);
+                Log.i("seznam:" , seznam);
+                if (seznam.equals("wish"))
+                    wish=true;
+                else if(seznam.equals("ogledan"))
+                    ogledan=true;
+                else if (seznam.equals("priljubljen"))
+                    priljubljen=true;
+            }
+        }
+
 
         //add favourites
         //manjka: if film ze na seznamu, slika x, else slika y
         priljubljeno = (ImageView) view.findViewById(R.id.fave);
-        if(idFilma==140607){
+        if(priljubljen){
             priljubljeno.setImageResource(R.drawable.filmi_heart);
             priljubljeno.setTag("fave");
         }
@@ -67,10 +112,14 @@ public class FragmentOpis extends Fragment {
                if(priljubljeno.getTag().equals("fave")){
                    priljubljeno.setImageResource(R.drawable.filmi_heart_empty);
                    priljubljeno.setTag("notFave");
+                   seznamids.odstraniSSeznama(id, "priljubljen");
                }
                 else{
                    priljubljeno.setImageResource(R.drawable.filmi_heart);
                    priljubljeno.setTag("fave");
+                   if (!baza)
+                       id=filmids.dodajFilm(film);
+                   seznamids.dodajNaSeznam(id, "priljubljen");
                }
             }
         });
@@ -79,7 +128,7 @@ public class FragmentOpis extends Fragment {
         ogledano = (ImageView) view.findViewById(R.id.watched);
         neOgledano = (ImageView) view.findViewById(R.id.notWatched);
 
-        if(idFilma==140607){
+        if(ogledan){
             neOgledano.setVisibility(View.GONE);
         }
         else{
@@ -90,18 +139,23 @@ public class FragmentOpis extends Fragment {
         neOgledano.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               neOgledano.setVisibility(View.GONE);
+                Log.i("v neogledano je", "T");
+                neOgledano.setVisibility(View.GONE);
                 ogledano.setVisibility(View.VISIBLE);
+                if (!baza)
+                    id=filmids.dodajFilm(film);
+                seznamids.dodajNaSeznam(id, "ogledan");
+                wishlist.setVisibility(View.GONE);
             }
         });
 
         //wishlist - ce je na seznamu ogledanih, ne sme biti prikazano!
         wishlist = (ImageView) view.findViewById(R.id.wish);
-        if(idFilma==12345){
+        if(ogledan){
             wishlist.setVisibility(View.GONE);
         }else{
             //ce je na wishlisti ali ne
-            if(idFilma==140607){
+            if(wish){
                 wishlist.setImageResource(R.drawable.filmi_star);
                 wishlist.setTag("wish");
             }
@@ -119,14 +173,19 @@ public class FragmentOpis extends Fragment {
                 if(wishlist.getTag().equals("wish")){
                     wishlist.setImageResource(R.drawable.filmi_star_empty);
                     wishlist.setTag("notWish");
+                    seznamids.odstraniSSeznama(id, "wish");
                 }
                 else{
                     wishlist.setImageResource(R.drawable.filmi_star);
                     wishlist.setTag("wish");
+                    if (!baza)
+                        id=filmids.dodajFilm(film);
+                    seznamids.dodajNaSeznam(id, "wish");
                 }
             }
         });
 
+        Log.i("id filma", ""+ id);
         //recommend to friend
         ImageView share = (ImageView) view.findViewById(R.id.share);
         share.setOnClickListener(new View.OnClickListener() {
@@ -179,31 +238,35 @@ public class FragmentOpis extends Fragment {
             //izpis rezultatov
             if(result!=null) {
                //izpis
-                ImageView imageView = (ImageView) view.findViewById(R.id.poster);
-                Picasso.with(getActivity().getBaseContext())
-                        .load(film.getUrlDoSlike())
-                        .resize(170,240)
-                        .into(imageView);
-                TextView textView = ( TextView ) view.findViewById(R.id.title);
-                textView.setText(film.getNaslov());
-                textView = ( TextView ) view.findViewById(R.id.categories);
-                textView.setText(film.getKategorije());
-                textView = ( TextView ) view.findViewById(R.id.year);
-                textView.setText(""+film.getLetoIzida());
-                textView = ( TextView ) view.findViewById(R.id.ocena);
-                textView.setText(""+film.getOcena());
-                textView = ( TextView ) view.findViewById(R.id.rezija); System.out.println("kat: " + film.getIgralci());
-                textView.setText(film.getReziserji());
-                textView = ( TextView ) view.findViewById(R.id.igralci);
-                textView.setText(film.getIgralci());
-                textView = ( TextView ) view.findViewById(R.id.opis);
-                textView.setText(film.getOpis());
-
-                //video =/
-
+                napolniView(result);
             }
 
         }
+    }
+
+    private void napolniView(Film film){
+
+            ImageView imageView = (ImageView) view.findViewById(R.id.poster);
+            Picasso.with(getActivity().getBaseContext())
+                        .load(film.getUrlDoSlike())
+                        .resize(170,240)
+                    .into(imageView);
+            TextView textView = ( TextView ) view.findViewById(R.id.title);
+        textView.setText(film.getNaslov());
+            textView = ( TextView ) view.findViewById(R.id.categories);
+        textView.setText(film.getKategorije());
+            textView = ( TextView ) view.findViewById(R.id.year);
+        textView.setText(""+film.getLetoIzida());
+            textView = ( TextView ) view.findViewById(R.id.ocena);
+        textView.setText(""+film.getOcena());
+            textView = ( TextView ) view.findViewById(R.id.rezija); System.out.println("kat: " + film.getIgralci());
+        textView.setText(film.getReziserji());
+            textView = ( TextView ) view.findViewById(R.id.igralci);
+        textView.setText(film.getIgralci());
+            textView = ( TextView ) view.findViewById(R.id.opis);
+        textView.setText(film.getOpis());
+
+                //video =/
     }
 
 }

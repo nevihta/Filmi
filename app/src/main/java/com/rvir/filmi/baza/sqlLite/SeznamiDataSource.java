@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.beans.Seznami;
@@ -93,10 +94,10 @@ public class SeznamiDataSource {
 
     public void dodajNaSeznam(int id, String seznam){
         Cursor cursor =
-                database.rawQuery("select +" + SQLiteHelper.ID_TIPA + " from " + SQLiteHelper.TABELA_TIP_SEZNAM + " where " + SQLiteHelper.NAZIV_T + " = " + seznam, null);
+                database.rawQuery("select " + SQLiteHelper.ID_TIPA + " from " + SQLiteHelper.TABELA_TIP_SEZNAM + " where " + SQLiteHelper.NAZIV_T + " = '" + seznam + "'", null);
 
         int idTipa=1;
-        if (cursor != null){
+        if ((cursor != null)&&(cursor.getCount()>0)){
             cursor.moveToFirst();
             idTipa = (Integer.parseInt(cursor.getString(0)));
             cursor.close();
@@ -106,16 +107,26 @@ public class SeznamiDataSource {
         ContentValues values = new ContentValues();
         values.put(SQLiteHelper.TK_ID_FILM_S, id);
         values.put(SQLiteHelper.TK_ID_TIP, idTipa);
-        database.insert(SQLiteHelper.TABELA_FILMI, null, values);
+        database.insert(SQLiteHelper.TABELA_SEZNAMI, null, values);
 
         if(seznam.equals("ogledan")) {
-            database.delete(SQLiteHelper.TABELA_SEZNAMI, SQLiteHelper.TK_ID_TIP + "=" + idTipa + " AND " + SQLiteHelper.TK_ID_FILM +"=" + id, null);
+
+            cursor =
+                    database.rawQuery("select " + SQLiteHelper.ID_TIPA + " from " + SQLiteHelper.TABELA_TIP_SEZNAM + " where " + SQLiteHelper.NAZIV_T + " = 'wish'", null);
+
+            if ((cursor != null)&&(cursor.getCount()>0)){
+                cursor.moveToFirst();
+                idTipa = (Integer.parseInt(cursor.getString(0)));
+                cursor.close();
+            }
+
+            database.delete(SQLiteHelper.TABELA_SEZNAMI, SQLiteHelper.TK_ID_TIP + "=" + idTipa + " AND " + SQLiteHelper.TK_ID_FILM + "=" + id, null);
         }
     }
 
     public void odstraniSSeznama(int id, String seznam){
         Cursor cursor =
-                database.rawQuery("select +" + SQLiteHelper.ID_TIPA + " from " + SQLiteHelper.TABELA_TIP_SEZNAM + " where " + SQLiteHelper.NAZIV_T + " = " + seznam, null);
+                database.rawQuery("select " + SQLiteHelper.ID_TIPA + " from " + SQLiteHelper.TABELA_TIP_SEZNAM + " where " + SQLiteHelper.NAZIV_T + " = '" + seznam + "'", null);
 
         int idTipa=1;
         if (cursor != null){
@@ -135,10 +146,12 @@ public class SeznamiDataSource {
 
         ArrayList <String> seznami = new ArrayList<String>();
 
-        while (!cursor.isAfterLast()) {
-            seznami.add(cursor.getString(0));
-            cursor.moveToNext();
-        }
+      // Log.i("cursor size", cursor.getCount()+"");
+       cursor.moveToFirst();
+       while (!cursor.isAfterLast()) {
+           seznami.add(cursor.getString(0));
+           cursor.moveToNext();
+       }
         cursor.close();
         return seznami;
     }

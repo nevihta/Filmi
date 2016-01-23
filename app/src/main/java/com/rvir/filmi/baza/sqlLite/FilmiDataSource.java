@@ -36,14 +36,15 @@ public class FilmiDataSource {
         Cursor cursor =
                 database.query(SQLiteHelper.TABELA_FILMI,  // a. table
                         FILM_COLUMNS, // b. column names
-                        SQLiteHelper.ID_FILMA + "  = ?", // c. selections
+                        SQLiteHelper.ID_FILMA_API + "  = ?", // c. selections
                         new String[]{String.valueOf(id)}, // d. selections args
                         null, // e. group by
                         null, // f. having
                         null, // g. order by
                         null); // h. limit
         Film film=null;
-        if (cursor != null){
+        Log.i("cursor.getCount", cursor.getCount()+"");
+        if((cursor != null)&&(cursor.getCount()>0)){
             cursor.moveToFirst();
             film = cursorToFilm(cursor);
             cursor.close();
@@ -55,7 +56,7 @@ public class FilmiDataSource {
         return film;
     }
 
-    public void dodajFilm(Film film){
+    public int dodajFilm(Film film){
 
         ContentValues values = new ContentValues();
         values.put(SQLiteHelper.ID_FILMA_API, film.getIdFilmApi());
@@ -70,8 +71,11 @@ public class FilmiDataSource {
         values.put(SQLiteHelper.SLIKA, film.getUrlDoSlike());
         values.put(SQLiteHelper.VIDEO, film.getUrlVideo());
 
-        database.insert(SQLiteHelper.TABELA_FILMI, null, values);
-   }
+        //database.insert(SQLiteHelper.TABELA_FILMI, null, values);
+
+        return (int)database.insert(SQLiteHelper.TABELA_FILMI, null, values);
+
+    }
 
     public boolean spremeniMojoOceno(int id, String ocena){
         ContentValues newValues = new ContentValues();
