@@ -42,6 +42,10 @@
             android:label="@string/title_activity_seznami"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity android:name=".uporabnik.PrijateljiActivity"
+            android:label="@string/title_activity_prijatelji"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

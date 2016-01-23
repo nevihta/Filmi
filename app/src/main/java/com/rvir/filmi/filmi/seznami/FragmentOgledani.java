@@ -18,7 +18,7 @@ import com.rvir.filmi.filmi.film.FilmActivity;
 
 import java.util.ArrayList;
 
-public class FragmentOgledani extends Fragment {
+public class FragmentOgledani extends Fragment implements OgledaniInterface{
     private FilmiDataSource datasource;
     View view = null;
     private ArrayList<Film> ogledaniFilmi = null;
@@ -27,6 +27,7 @@ public class FragmentOgledani extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view =  inflater.inflate(R.layout.content_seznami_fragment_ogledani, container, false);
+
         GetOgledaniTask task = new GetOgledaniTask();
         task.execute();
 
@@ -52,11 +53,11 @@ public class FragmentOgledani extends Fragment {
             //iz baze filme
             ogledaniFilmi = new ArrayList<>();
             Film f = new Film();
-            f.setNaslov("title1"); f.setKategorije("Comedy, Science fiction, Drama, Action"); f.setIdFilmApi(1);
+            f.setNaslov("title1"); f.setKategorije("Comedy, Science fiction, Drama, Action"); f.setIdFilmApi(140607);
             ogledaniFilmi.add(f);
 
             Film c = new Film();
-            c.setNaslov("title2"); c.setKategorije("Comedy, Science fiction, Drama, Action, Fantasy"); c.setIdFilmApi(2);
+            c.setNaslov("title2"); c.setKategorije("Comedy, Science fiction, Drama, Action, Fantasy"); c.setIdFilmApi(206647);
             ogledaniFilmi.add(c);
 
             return ogledaniFilmi;
@@ -69,7 +70,7 @@ public class FragmentOgledani extends Fragment {
             //izpis rezultatov
             if(result.size()>0) {
                 ListView listView = ( ListView ) view.findViewById(R.id.listOgledani);
-                SeznamiOgledaniAdapter spa = new SeznamiOgledaniAdapter(getActivity(), ogledaniFilmi);
+                SeznamiOgledaniAdapter spa = new SeznamiOgledaniAdapter(getActivity(), ogledaniFilmi, FragmentOgledani.this);
                 listView.setAdapter(spa);
 
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,6 +87,24 @@ public class FragmentOgledani extends Fragment {
             }
 
         }
+    }
+
+    @Override
+    public void remove(int idFilma) {
+        //async task za zbrisat film iz seznama, in pridobit cel seznam ter ga prikaati (isti postExecute kot pri getOGledaniTask
+        System.out.println("remove"+idFilma);
+    }
+
+    @Override
+    public void writeReview(int idFilma) {
+        //intent, start activity to write review
+        System.out.println("write review"+idFilma);
+    }
+
+    @Override
+    public void recommend(int idFilma) {
+        //intent, start activity to recommend to friend
+        System.out.println("recommend"+idFilma);
     }
 
 }

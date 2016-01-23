@@ -18,6 +18,7 @@ import android.widget.Button;
 import com.rvir.filmi.filmi.filmi.FilmiActivity;
 import com.rvir.filmi.filmi.seznami.SeznamiActivity;
 import com.rvir.filmi.filmi.uporabnik.Login;
+import com.rvir.filmi.filmi.uporabnik.PrijateljiActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,6 +61,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), SeznamiActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button prijatelji = (Button) findViewById(R.id.buttonPrijatelji);
+        prijatelji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), PrijateljiActivity.class);
                 startActivity(i);
             }
         });

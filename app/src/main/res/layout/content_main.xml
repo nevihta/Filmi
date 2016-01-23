@@ -66,11 +66,13 @@
         android:layout_weight="1" >
 
         <Button
+            android:id="@+id/buttonPrijatelji"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#303F9F"
-            android:layout_margin="10dp" />
+            android:layout_margin="10dp"
+            android:text="Prijatelji"/>
 
         <Button
             android:id="@+id/buttonPrijava"

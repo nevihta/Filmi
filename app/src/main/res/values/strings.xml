@@ -9,4 +9,5 @@
     <string name="title_activity_login">Prijava</string>
     <string name="title_activity_registracija">Registracija</string>
     <string name="title_activity_seznami">Seznami</string>
+    <string name="title_activity_prijatelji">Prijatelji</string>
 </resources>

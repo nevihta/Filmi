@@ -14,17 +14,17 @@ import com.rvir.filmi.filmi.R;
 
 import java.util.ArrayList;
 
-public class SeznamiOgledaniAdapter extends BaseAdapter {
-    OgledaniInterface ogledaniInterface;
+public class SeznamiWishlistAdapter extends BaseAdapter {
+    WishlistInterface wishlistInterface;
     private Activity activity;
     private ArrayList<Film> data;
     private static LayoutInflater inflater = null;
 
-    public SeznamiOgledaniAdapter(Activity a, ArrayList<Film> d, FragmentOgledani f) {
+    public SeznamiWishlistAdapter(Activity a, ArrayList<Film> d, FragmentWishlist f) {
         activity = a;
         data = d;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ogledaniInterface = f;
+        wishlistInterface = f;
     }
 
     public int getCount() {
@@ -42,7 +42,7 @@ public class SeznamiOgledaniAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         if (convertView == null)
-            vi = inflater.inflate(R.layout.custom_seznami_ogledani_list, null);
+            vi = inflater.inflate(R.layout.custom_seznami_wishlist_list, null);
 
         TextView title = (TextView) vi.findViewById(R.id.title);
         TextView kategorije = (TextView) vi.findViewById(R.id.kategorije);
@@ -60,29 +60,18 @@ public class SeznamiOgledaniAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 System.out.println(view.getTag().toString());
-                ogledaniInterface.remove(Integer.parseInt(view.getTag().toString()));
+                wishlistInterface.remove(Integer.parseInt(view.getTag().toString()));
             }
         });
 
-        ImageView write = (ImageView) vi.findViewById(R.id.write);
-        write.setTag(new Integer(film.getIdFilma()));
-        write.setOnClickListener(new View.OnClickListener() {
+        ImageView ogledan = (ImageView) vi.findViewById(R.id.ogledan);
+        ogledan.setTag(new Integer(film.getIdFilma()));
+        ogledan.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 System.out.println(view.getTag().toString());
-                ogledaniInterface.writeReview(Integer.parseInt(view.getTag().toString()));
-            }
-        });
-
-        ImageView share = (ImageView) vi.findViewById(R.id.share);
-        share.setTag(new Integer(film.getIdFilma()));
-        share.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                System.out.println(view.getTag().toString());
-                ogledaniInterface.recommend(Integer.parseInt(view.getTag().toString()));
+                wishlistInterface.putOnOgledani(Integer.parseInt(view.getTag().toString()));
             }
         });
 
