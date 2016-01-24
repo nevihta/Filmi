@@ -39,14 +39,15 @@ public class SeznamiDataSource {
     }
 
     public ArrayList<Film> pridobiOgledane(){
-        String sql = "select f.* from  " + SQLiteHelper.TABELA_FILMI + " f, " + SQLiteHelper.TABELA_SEZNAMI + "s, " + SQLiteHelper.TABELA_TIP_SEZNAM + "t " +
-                "where f." + SQLiteHelper.ID_FILMA+ "=s." + SQLiteHelper.TK_ID_FILM_S + " and s." + SQLiteHelper.TK_ID_TIP + "= t." +
+        String sql = "select f.* from  " + SQLiteHelper.TABELA_FILMI + " f, " + SQLiteHelper.TABELA_SEZNAMI + " s, " + SQLiteHelper.TABELA_TIP_SEZNAM + " t " +
+                " where f." + SQLiteHelper.ID_FILMA+ "=s." + SQLiteHelper.TK_ID_FILM_S + " and s." + SQLiteHelper.TK_ID_TIP + "= t." +
                 SQLiteHelper.ID_TIPA + " and t." + SQLiteHelper.NAZIV_T + "= 'ogledan'";
         Cursor cursor = database.rawQuery(sql, null);
 
         ArrayList<Film> filmi = new ArrayList<>();
         Film f;
 
+        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             f=cursorToFilm(cursor);
             filmi.add(f);
@@ -57,14 +58,15 @@ public class SeznamiDataSource {
     }
 
     public ArrayList<Film> pridobiPriljubljene(){
-        String sql = "select f.* from  " + SQLiteHelper.TABELA_FILMI + " f, " + SQLiteHelper.TABELA_SEZNAMI + "s, " + SQLiteHelper.TABELA_TIP_SEZNAM + "t " +
-                "where f." + SQLiteHelper.ID_FILMA+ "=s." + SQLiteHelper.TK_ID_FILM_S + " and s." + SQLiteHelper.TK_ID_TIP + "= t." +
+        String sql = "select f.* from  " + SQLiteHelper.TABELA_FILMI + " f, " + SQLiteHelper.TABELA_SEZNAMI + " s, " + SQLiteHelper.TABELA_TIP_SEZNAM + " t " +
+                " where f." + SQLiteHelper.ID_FILMA+ "=s." + SQLiteHelper.TK_ID_FILM_S + " and s." + SQLiteHelper.TK_ID_TIP + "= t." +
                 SQLiteHelper.ID_TIPA + " and t." + SQLiteHelper.NAZIV_T + "= 'priljubljen'";
         Cursor cursor = database.rawQuery(sql, null);
 
         ArrayList<Film> filmi = new ArrayList<>();
         Film f;
 
+        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             f=cursorToFilm(cursor);
             filmi.add(f);
@@ -75,14 +77,15 @@ public class SeznamiDataSource {
     }
 
     public ArrayList<Film> pridobiWishListo(){
-        String sql = "select f.* from  " + SQLiteHelper.TABELA_FILMI + " f, " + SQLiteHelper.TABELA_SEZNAMI + "s, " + SQLiteHelper.TABELA_TIP_SEZNAM + "t " +
-                "where f." + SQLiteHelper.ID_FILMA+ "=s." + SQLiteHelper.TK_ID_FILM_S + " and s." + SQLiteHelper.TK_ID_TIP + "= t." +
+        String sql = "select f.* from  " + SQLiteHelper.TABELA_FILMI + " f, " + SQLiteHelper.TABELA_SEZNAMI + " s, " + SQLiteHelper.TABELA_TIP_SEZNAM + " t " +
+                " where f." + SQLiteHelper.ID_FILMA+ "=s." + SQLiteHelper.TK_ID_FILM_S + " and s." + SQLiteHelper.TK_ID_TIP + "= t." +
                 SQLiteHelper.ID_TIPA + " and t." + SQLiteHelper.NAZIV_T + "= 'wish'";
         Cursor cursor = database.rawQuery(sql, null);
 
         ArrayList<Film> filmi = new ArrayList<>();
         Film f;
 
+        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             f=cursorToFilm(cursor);
             filmi.add(f);
@@ -129,7 +132,7 @@ public class SeznamiDataSource {
                 database.rawQuery("select " + SQLiteHelper.ID_TIPA + " from " + SQLiteHelper.TABELA_TIP_SEZNAM + " where " + SQLiteHelper.NAZIV_T + " = '" + seznam + "'", null);
 
         int idTipa=1;
-        if (cursor != null){
+        if ((cursor != null)&&(cursor.getCount()>0)){
             cursor.moveToFirst();
             idTipa = (Integer.parseInt(cursor.getString(0)));
             cursor.close();
