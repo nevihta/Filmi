@@ -10,4 +10,5 @@
     <string name="title_activity_registracija">Registracija</string>
     <string name="title_activity_seznami">Seznami</string>
     <string name="title_activity_prijatelji">Prijatelji</string>
+    <string name="title_activity_add_kritika">Dodaj Kritiko</string>
 </resources>

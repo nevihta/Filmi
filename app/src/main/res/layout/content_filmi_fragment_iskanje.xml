@@ -8,8 +8,26 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Tab 3"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:text="Iskanje" />
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchText"
+        android:layout_toEndOf="@+id/textView" />
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/buttonSearch"
+        android:background="@android:drawable/ic_menu_search"
+        android:layout_toEndOf="@+id/searchText" />
+
+    <ListView
+        android:id="@+id/listIskanje"
+        android:layout_below="@+id/searchText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/list_divider"
+        android:dividerHeight="1dp" />
+
 
 </RelativeLayout>

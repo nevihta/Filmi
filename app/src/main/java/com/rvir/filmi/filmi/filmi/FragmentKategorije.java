@@ -1,6 +1,7 @@
 package com.rvir.filmi.filmi.filmi;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.beans.Kategorija;
 import com.rvir.filmi.filmi.R;
 import com.rvir.filmi.filmi.ServiceHandler;
+import com.rvir.filmi.filmi.film.FilmActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -102,11 +104,11 @@ public class FragmentKategorije extends Fragment {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        // int idFilma = seznam.get(position).getId();
+                        int idFilma = filmi.get(position).getIdFilmApi();
 
-                        //  Intent myIntent = new Intent(view.getContext(), FilmActivity.class);
-                        //  myIntent.putExtra("id", (int) idFilma);
-                        //  startActivity(myIntent);
+                        Intent myIntent = new Intent(view.getContext(), FilmActivity.class);
+                        myIntent.putExtra("id", (int) idFilma);
+                        startActivity(myIntent);
 
                     }
                 });

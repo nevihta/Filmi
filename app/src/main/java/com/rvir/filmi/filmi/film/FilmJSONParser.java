@@ -37,7 +37,12 @@ public class FilmJSONParser {
                 JSONObject jObject = jArray.getJSONObject(i);
                 kategorije+=jObject.getString("name")+", ";
             }
-            film.setKategorije(kategorije.substring(0, kategorije.length()-2)); System.out.println(kategorije);
+            if(kategorije.length()>3) {
+                film.setKategorije(kategorije.substring(0, kategorije.length() - 2));
+                System.out.println(kategorije);
+            }
+            else
+                film.setKategorije(" ");
 
             //video
             JSONArray jArray2 = jObj.getJSONObject("videos").getJSONArray("results");
@@ -68,7 +73,10 @@ public class FilmJSONParser {
                 JSONObject jObject = jArray.getJSONObject(i);
                 igralci+=jObject.getString("name")+", ";
             }
-            film.setIgralci(igralci.substring(0, igralci.length()-2));
+            if(igralci.length()>3)
+                film.setIgralci(igralci.substring(0, igralci.length()-2));
+            else
+                film.setIgralci(" ");
 
             //mogoce se direktorja?
             JSONArray jArray2 = jObj.getJSONArray("crew");
@@ -81,8 +89,10 @@ public class FilmJSONParser {
                 }
 
             }
-            film.setReziserji(rezija.substring(0,rezija.length()-2));
-            //film.setTrailer
+            if(rezija.length()>3)
+                film.setReziserji(rezija.substring(0,rezija.length()-2));
+            else
+                film.setReziserji(" ");
 
         } catch (JSONException e) {
             Log.e("JSONException", "Error: " + e.toString());
@@ -107,7 +117,12 @@ public class FilmJSONParser {
                 JSONObject jObject = jArray.getJSONObject(i);
                 kategorije+=jObject.getString("name")+", ";
             }
-            film.setKategorije(kategorije); System.out.println(kategorije);
+            if(kategorije.length()>3) {
+                film.setKategorije(kategorije.substring(0, kategorije.length() - 2));
+                System.out.println(kategorije);
+            }
+            else
+                film.setKategorije(" ");
 
             //problem: kaj ce to null? crash crash
             ArrayList<Kritika> kritike = new ArrayList<>();
