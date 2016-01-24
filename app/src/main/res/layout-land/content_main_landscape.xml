@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior" tools:showIn="@layout/app_bar_main"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" tools:showIn="@layout-land/activity_main_landscape"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -26,23 +26,7 @@
             android:text="Filmi"
             android:textColor="#fef8f8" />
 
-        <Button
-            android:layout_width="0dip"
-            android:paddingTop="20dip"
-            android:drawableTop="@drawable/filmi_home_search"
-            android:text="Iskanje"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#e58c38"
-            android:layout_margin="10dp"
-            android:textColor="#fef8f8"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:orientation="horizontal"
-        android:layout_weight="1" >
 
         <Button
             android:layout_width="0dip"
@@ -55,6 +39,7 @@
             android:layout_margin="10dp"
             android:textColor="#fef8f8"/>
 
+
         <Button
             android:id="@+id/buttonSeznami"
             android:layout_width="0dip"
@@ -66,13 +51,29 @@
             android:layout_margin="10dp"
             android:text="Moji seznami filmov"
             android:textColor="#fef8f8" />
+
+
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
         android:layout_weight="1" >
+
+
+
+        <Button
+            android:layout_width="0dip"
+            android:paddingTop="20dip"
+            android:drawableTop="@drawable/filmi_home_search"
+            android:text="Iskanje"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#e58c38"
+            android:layout_margin="10dp"
+            android:textColor="#fef8f8"/>
 
         <Button
             android:id="@+id/buttonPrijatelji"
