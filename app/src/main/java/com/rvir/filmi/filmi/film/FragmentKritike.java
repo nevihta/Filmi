@@ -94,7 +94,7 @@ public class FragmentKritike extends Fragment {
                     @Override
                     public void onClick(View v) {
                     Intent myIntent = new Intent(v.getContext(), AddKritikaActivity.class);
-                     myIntent.putExtra("id", (int) film.getIdFilma()); //idFIlma ali idFIlmaApi??
+                     myIntent.putExtra("id", (int) film.getIdFilmApi()); //idFIlma ali idFIlmaApi??
                      startActivity(myIntent);
                     }
                 });

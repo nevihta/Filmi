@@ -48,6 +48,11 @@
         </activity>
         <activity android:name=".film.AddKritikaActivity"
             android:label="@string/title_activity_add_kritika"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+        <activity android:name=".uporabnik.ProfilActivity"
+            android:label="@string/title_activity_profil"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>

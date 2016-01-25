@@ -23,6 +23,7 @@ import com.rvir.filmi.filmi.filmi.FilmiActivity;
 import com.rvir.filmi.filmi.seznami.SeznamiActivity;
 import com.rvir.filmi.filmi.uporabnik.Login;
 import com.rvir.filmi.filmi.uporabnik.PrijateljiActivity;
+import com.rvir.filmi.filmi.uporabnik.ProfilActivity;
 
 public class MainActivity extends AppCompatActivity {
     public static final String seja = "MyPrefs";
@@ -73,6 +74,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button search = (Button) findViewById(R.id.home_search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), FilmiActivity.class);
+                i.putExtra("OpenTab", 2);
+                startActivity(i);
+            }
+        });
+
         Button prijava = (Button) findViewById(R.id.buttonPrijava);
         prijava.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,10 +113,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(!prijavljen)
-            prijatelji.setVisibility(View.INVISIBLE);
-        //if(prijavljen)
-         //   prijava.setVisibility(View.INVISIBLE);
+        Button profil = (Button) findViewById(R.id.buttonProfil);
+        profil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), ProfilActivity.class);
+                startActivity(i);
+            }
+        });
+
+
+        if(!prijavljen) {
+            prijatelji.setVisibility(View.GONE);
+            prijava.setVisibility(View.VISIBLE);
+            //profil.setVisibility(View.GONE);
+        }
+        else{
+            prijatelji.setVisibility(View.VISIBLE);
+            prijava.setVisibility(View.GONE);
+            //profil.setVisibility(View.VISIBLE);
+
+        }
 
     }
 
