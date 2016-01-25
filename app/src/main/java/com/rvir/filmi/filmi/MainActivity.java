@@ -1,10 +1,13 @@
 package com.rvir.filmi.filmi;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,9 +25,13 @@ import com.rvir.filmi.filmi.uporabnik.Login;
 import com.rvir.filmi.filmi.uporabnik.PrijateljiActivity;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String seja = "MyPrefs";
+    private boolean prijavljen=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_bar_main);
 
@@ -48,6 +55,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
+        if(sharedpreferences.getString("idUporabnika", null)!=null)
+        {
+            prijavljen=true;
+            // Log.i("up je prijavljen",sharedpreferences.getString("idUporabnika", null));
+        }
+
+        Log.i("prijavljen", prijavljen + "");
+
         Button filmi = (Button) findViewById(R.id.buttonFilmi);
         filmi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         Button seznami = (Button) findViewById(R.id.buttonSeznami);
         seznami.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        if(!prijavljen)
+            prijatelji.setVisibility(View.INVISIBLE);
+        //if(prijavljen)
+         //   prijava.setVisibility(View.INVISIBLE);
 
     }
 

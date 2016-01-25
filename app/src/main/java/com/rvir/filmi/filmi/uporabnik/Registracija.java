@@ -1,7 +1,9 @@
 package com.rvir.filmi.filmi.uporabnik;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +17,16 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.table.query.Query;
+import com.rvir.filmi.baza.beans.Film;
+import com.rvir.filmi.baza.beans.SeznamAzure;
+import com.rvir.filmi.baza.beans.Seznami;
 import com.rvir.filmi.baza.beans.Uporabniki;
+import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
+import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 
 public class Registracija extends AppCompatActivity {
@@ -31,6 +39,8 @@ public class Registracija extends AppCompatActivity {
 
     private MobileServiceClient mClient;
     private MobileServiceTable<Uporabniki> mUporabnikiTable;
+    private MobileServiceTable<SeznamAzure> mSeznamiTable;
+    private SeznamiDataSource seznamds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +50,9 @@ public class Registracija extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        seznamds = new SeznamiDataSource(this);
+        seznamds.open();
+
         try {
             // Create the Mobile Service Client instance, using the provided
             mClient = new MobileServiceClient(
@@ -47,6 +60,8 @@ public class Registracija extends AppCompatActivity {
                     "RlptNyMuuAbjJOmVDoQYBmvhLUgjam37",
                     this);
             mUporabnikiTable = mClient.getTable(Uporabniki.class);
+            mSeznamiTable = mClient.getTable(SeznamAzure.class);
+
         } catch (MalformedURLException e) {
             //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         }
@@ -68,20 +83,6 @@ public class Registracija extends AppCompatActivity {
 
                     PreveriMailTask task = new PreveriMailTask();
                     task.execute(email.getText().toString());
-                    //preveri email
-                   /* GeneratorKode gk = new GeneratorKode();
-                    String koda = gk.generirajKodo();
-                    //ustvarimo uporabnika
-                    Uporabniki u = new Uporabniki();
-                    u.setKoda(koda);
-                    u.setUpIme(upIme.getText().toString());
-                    u.setEmail(email.getText().toString());
-                    u.setGeslo(geslo.getText().toString());
-
-                    RegistracijaTask task = new RegistracijaTask();
-                    task.execute(u);*/
-
-
                 }
             }
         });
@@ -128,7 +129,7 @@ public class Registracija extends AppCompatActivity {
                    RegistracijaTask task = new RegistracijaTask();
                    task.execute(u);
 
-                   Intent intent = new Intent(getApplicationContext(), Login.class);
+                   Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                    startActivity(intent);
                }
             else{
@@ -158,7 +159,10 @@ public class Registracija extends AppCompatActivity {
             try {
                 mUporabnikiTable.insert(up[0]).get();
                 id=up[0].getId();
-                Log.i("naredlo je", "upaaam");
+                SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString("idUporabnika", id);
+                editor.commit();
 
             } catch (Exception e) { }
             return id;
@@ -169,7 +173,65 @@ public class Registracija extends AppCompatActivity {
             if(pDialog.isShowing())
                 pDialog.dismiss();
 
-            //še sinhronizacija fali
-            }
+            SinhronizacijaTask task = new SinhronizacijaTask();
+            task.execute(id);
         }
+    }
+
+    private class SinhronizacijaTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("on preExecte", "");
+            // Showing progress dialog
+            //pDialog = new ProgressDialog(Registracija.this);
+            //pDialog.setMessage("Registracija poteka...");
+            //pDialog.setCancelable(false);
+            //pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... id) {
+            try {
+                SeznamAzure s = new SeznamAzure();
+                ArrayList<Film> priljubljeni= new ArrayList<Film>();
+                priljubljeni = seznamds.pridobiPriljubljene();
+                ArrayList<Film> ogledani= new ArrayList<Film>();
+                ogledani = seznamds.pridobiOgledane();
+                ArrayList<Film> wish= new ArrayList<Film>();
+                wish = seznamds.pridobiWishListo();
+                Log.i("pridibilo vse sezname", "");
+
+
+                for(int i=0; i<ogledani.size(); i++){
+                    s=new SeznamAzure(1, id[0], ogledani.get(i).getIdFilmApi(), ogledani.get(i).getNaslov());
+                    mSeznamiTable.insert(s);
+                }
+                Log.i("ogledani vstavljeni", "");
+
+                for(int i=0; i<priljubljeni.size(); i++){
+                    s=new SeznamAzure(2, id[0], priljubljeni.get(i).getIdFilmApi(), priljubljeni.get(i).getNaslov());
+                    mSeznamiTable.insert(s);
+                }
+                for(int i=0; i<wish.size(); i++){
+                    s=new SeznamAzure(3, id[0], wish.get(i).getIdFilmApi(), wish.get(i).getNaslov());
+                    mSeznamiTable.insert(s);
+                }
+
+                Log.i("naredlo je", "upaaam");
+
+
+            } catch (Exception e) { }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String id) {
+            //if(pDialog.isShowing())
+             //   pDialog.dismiss();
+
+        }
+    }
 }

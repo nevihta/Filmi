@@ -54,13 +54,13 @@ public class SeznamiPriljubljeniAdapter extends BaseAdapter {
         kategorije.setText(film.getKategorije());
 
         ImageView delete = (ImageView) vi.findViewById(R.id.delete);
-        delete.setTag(new Integer(film.getIdFilma()));
+        delete.setTag(R.string.idFilma, new Integer(film.getIdFilma()));
+        delete.setTag(R.string.idFilmaApi, new Integer(film.getIdFilmApi()));
         delete.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                System.out.println(view.getTag().toString());
-                priljubljeniInterface.remove(Integer.parseInt(view.getTag().toString()));
+                priljubljeniInterface.remove(Integer.parseInt(view.getTag(R.string.idFilma).toString()),view.getTag(R.string.idFilmaApi).toString());
             }
         });
 

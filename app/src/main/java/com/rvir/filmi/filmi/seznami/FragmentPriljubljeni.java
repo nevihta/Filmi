@@ -1,7 +1,9 @@
 package com.rvir.filmi.filmi.seznami;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.widget.ListView;
 import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
 import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
+import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
 import com.rvir.filmi.filmi.film.FilmActivity;
 
@@ -23,11 +26,16 @@ public class FragmentPriljubljeni extends Fragment implements PriljubljeniInterf
     private SeznamiDataSource seznamids;
     View view = null;
     private ArrayList<Film> priljubljeniFilmi = null;
+    private boolean prijavljen=false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view =  inflater.inflate(R.layout.content_seznami_fragment_priljubljeni, container, false);
+
+        SharedPreferences sharedpreferences = getActivity().getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
+        if(sharedpreferences.getString("idUporabnika", null)!=null)
+            prijavljen=true;
 
         seznamids = new SeznamiDataSource(getContext());
         seznamids.open();
@@ -96,11 +104,15 @@ public class FragmentPriljubljeni extends Fragment implements PriljubljeniInterf
     }
 
     @Override
-    public View remove(int idFilma) {
+    public View remove(int idFilma, String idFilmaApi) {
         //async task za zbrisat film iz seznama, in pridobit cel seznam ter ga prikazati (isti postExecute kot pri getOGledaniTask
         System.out.println("remove" + idFilma);
         seznamids.odstraniSSeznama(idFilma, "priljubljen");
 
+        if(prijavljen) {
+            //preveri če ma internetno povezavo
+            DeleteTask dt = new DeleteTask(getActivity(), "2", idFilmaApi);
+        }
         GetPriljubljeniTask task = new GetPriljubljeniTask();
         task.execute();
         return view;

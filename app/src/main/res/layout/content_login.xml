@@ -67,6 +67,18 @@
         android:layout_centerHorizontal="true"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Odjava"
+        android:textColor="#303F9F"
+        android:id="@+id/OdjavaButton"
+        android:paddingStart="10dp"
+        android:clickable="true"
+        android:layout_below="@+id/prijavaButton"
+
+        />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,6 +106,7 @@
             android:clickable="true"
             />
     </LinearLayout>
+
 
 
 

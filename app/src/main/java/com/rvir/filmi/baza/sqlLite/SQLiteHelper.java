@@ -87,11 +87,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_SEZNAM_TABLE);
 
         ContentValues values = new ContentValues();
-        values.put(SQLiteHelper.NAZIV_T, "ogledan");
+        values.put(SQLiteHelper.NAZIV_T, "ogledan"); //id=1 v globalni
         db.insert(SQLiteHelper.TABELA_TIP_SEZNAM, null, values);
-        values.put(SQLiteHelper.NAZIV_T, "priljubljen");
+        values.put(SQLiteHelper.NAZIV_T, "priljubljen"); //id=2 v globalni
         db.insert(SQLiteHelper.TABELA_TIP_SEZNAM, null, values);
-        values.put(SQLiteHelper.NAZIV_T, "wish");
+        values.put(SQLiteHelper.NAZIV_T, "wish"); //id=3 v globalni
         db.insert(SQLiteHelper.TABELA_TIP_SEZNAM, null, values);
 
     }

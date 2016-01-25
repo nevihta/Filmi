@@ -1,7 +1,9 @@
 package com.rvir.filmi.filmi.film;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,14 +21,21 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.rvir.filmi.baza.beans.Film;
+import com.rvir.filmi.baza.beans.SeznamAzure;
+import com.rvir.filmi.baza.beans.Uporabniki;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
 import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
+import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
 import com.rvir.filmi.filmi.ServiceHandler;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public class FragmentOpis extends Fragment {
@@ -39,6 +48,11 @@ public class FragmentOpis extends Fragment {
     private SeznamiDataSource seznamids;
     Boolean baza;
     int id=0;
+    private boolean prijavljen=false;
+    private String idUp;
+
+    private MobileServiceClient mClient;
+    private MobileServiceTable<SeznamAzure> mSeznamiTable;
 
     View view = null;
 
@@ -46,11 +60,33 @@ public class FragmentOpis extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view =  inflater.inflate(R.layout.content_film_fragment_opis, container, false);
+
+        SharedPreferences sharedpreferences = getActivity().getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
+        if(sharedpreferences.getString("idUporabnika", null)!=null){
+            prijavljen=true;
+            idUp=sharedpreferences.getString("idUporabnika", null);
+        }
+
+
+
         final int idFilma = getActivity().getIntent().getExtras().getInt("id");
         System.out.println(idFilma);
 
         filmids = new FilmiDataSource(getContext());
         seznamids = new SeznamiDataSource(getContext());
+
+        try {
+            // Create the Mobile Service Client instance, using the provided
+            mClient = new MobileServiceClient(
+                    "https://filmi.azure-mobile.net/",
+                    "RlptNyMuuAbjJOmVDoQYBmvhLUgjam37",
+                    getContext());
+            mSeznamiTable = mClient.getTable(SeznamAzure.class);
+
+        } catch (MalformedURLException e) {
+            //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+        }
+
 
         String seznam;
         Boolean wish=false;
@@ -113,6 +149,11 @@ public class FragmentOpis extends Fragment {
                    priljubljeno.setImageResource(R.drawable.filmi_heart_empty);
                    priljubljeno.setTag("notFave");
                    seznamids.odstraniSSeznama(id, "priljubljen");
+                   if(prijavljen) {
+                       //if povezava
+                        SinhronizacijaTask task = new SinhronizacijaTask();
+                        task.execute("odstrani", "2", film.getIdFilmApi() + "");
+                    }
                }
                 else{
                    priljubljeno.setImageResource(R.drawable.filmi_heart);
@@ -120,6 +161,11 @@ public class FragmentOpis extends Fragment {
                    if (!baza)
                        id=filmids.dodajFilm(film);
                    seznamids.dodajNaSeznam(id, "priljubljen");
+                   if(prijavljen) {
+                       //if povezava
+                       SinhronizacijaTask task = new SinhronizacijaTask();
+                       task.execute("dodaj", "2", film.getIdFilmApi() + "", film.getNaslov());
+                   }
                }
             }
         });
@@ -145,7 +191,13 @@ public class FragmentOpis extends Fragment {
                 if (!baza)
                     id=filmids.dodajFilm(film);
                 seznamids.dodajNaSeznam(id, "ogledan");
-                wishlist.setVisibility(View.GONE);
+                if(prijavljen) {
+                    //if povezava
+                    SinhronizacijaTask task = new SinhronizacijaTask();
+                    task.execute("dodaj", "1", film.getIdFilmApi() + "", film.getNaslov());
+                    wishlist.setVisibility(View.GONE);
+                }
+
             }
         });
 
@@ -174,13 +226,23 @@ public class FragmentOpis extends Fragment {
                     wishlist.setImageResource(R.drawable.filmi_star_empty);
                     wishlist.setTag("notWish");
                     seznamids.odstraniSSeznama(id, "wish");
+                    if (prijavljen) {
+                        //if povezava
+                        SinhronizacijaTask task = new SinhronizacijaTask();
+                        task.execute("odstrani", "3", film.getIdFilmApi() + "");
+                    }
                 }
-                else{
+                else {
                     wishlist.setImageResource(R.drawable.filmi_star);
                     wishlist.setTag("wish");
                     if (!baza)
-                        id=filmids.dodajFilm(film);
+                        id = filmids.dodajFilm(film);
                     seznamids.dodajNaSeznam(id, "wish");
+                    if (prijavljen) {
+                        //if povezava
+                        SinhronizacijaTask task = new SinhronizacijaTask();
+                        task.execute("dodaj", "3", film.getIdFilmApi() + "", film.getNaslov());
+                    }
                 }
             }
         });
@@ -267,6 +329,58 @@ public class FragmentOpis extends Fragment {
         textView.setText(film.getOpis());
 
                 //video =/
+    }
+
+    private class SinhronizacijaTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("on preExecte", "");
+            // Showing progress dialog
+            //pDialog = new ProgressDialog(Registracija.this);
+            //pDialog.setMessage("Registracija poteka...");
+            //pDialog.setCancelable(false);
+            //pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... argumenti) {
+            try {
+
+
+               idUp="5555";
+
+                if(argumenti[0].equals("dodaj")){
+                    SeznamAzure s = new SeznamAzure();
+                    s=new SeznamAzure(Integer.parseInt(argumenti[1]), idUp, Integer.parseInt(argumenti[2]),argumenti[3]);
+                    mSeznamiTable.insert(s);
+                    if(argumenti[1].equals("1")){
+                        MobileServiceList<SeznamAzure> sa;
+                        sa=mSeznamiTable.where().field("tk_id_tipa").eq(3).and().field("tk_id_filma").eq(argumenti[2]).and().field("tk_id_uporabnika").eq(idUp).execute().get();
+                        mSeznamiTable.delete(sa.get(0));
+                    }
+
+                }
+                else if(argumenti[0].equals("odstrani")){
+                    MobileServiceList<SeznamAzure> s;
+                    s=mSeznamiTable.where().field("tk_id_tipa").eq(argumenti[1]).and().field("tk_id_filma").eq(argumenti[2]).and().field("tk_id_uporabnika").eq(idUp).execute().get();
+                    mSeznamiTable.delete(s.get(0));
+                }
+
+
+
+            } catch (Exception e) { }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String id) {
+            //if(pDialog.isShowing())
+            //   pDialog.dismiss();
+
+        }
     }
 
 }

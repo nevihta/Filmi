@@ -1,7 +1,9 @@
 package com.rvir.filmi.filmi.uporabnik;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
@@ -21,6 +24,7 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.rvir.filmi.baza.beans.Prijatelji;
 import com.rvir.filmi.baza.beans.Uporabniki;
+import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
 import com.rvir.filmi.filmi.film.FilmActivity;
 import com.rvir.filmi.filmi.filmi.FilmiActivity;
@@ -32,6 +36,7 @@ import java.util.ArrayList;
 public class PrijateljiActivity extends AppCompatActivity implements PrijateljiInterface {
 
     private ArrayList<Prijatelji> prijatelji=null;
+    private String idUp;
 
     EditText koda;
 
@@ -48,6 +53,9 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
+        idUp=sharedpreferences.getString("idUporabnika", null);
+
         try {
             // Create the Mobile Service Client instance, using the provided
             mClient = new MobileServiceClient(
@@ -61,7 +69,7 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
         }
 
         PridobiPrijateljeTask task=new PridobiPrijateljeTask();
-        task.execute("5555");
+        task.execute(idUp);
 
         koda = (EditText)findViewById(R.id.editKoda);
         //koda.setText("QBW1Tk40");
@@ -182,7 +190,6 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
 
             try {
                 mPrijateljiTable.insert(p[0]).get();
-                Log.i("naredlo je", "upaaam");
 
             } catch (Exception e) {
             }
@@ -193,8 +200,11 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
         protected void onPostExecute(Prijatelji p) {
             if (pDialog.isShowing())
                 pDialog.dismiss();
+
+            TextView vnosKode = (TextView)findViewById(R.id.editKoda);
+            vnosKode.setText(null);
             PridobiPrijateljeTask task=new PridobiPrijateljeTask();
-            task.execute("5555");
+            task.execute(idUp);
 
 
         }
@@ -230,17 +240,22 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
                     pDialog.dismiss();
 
                 if(u.size()>0){
-                    u.get(0);
 
-                    Prijatelji p = new Prijatelji();
-                    //vnese se s shranjene seje - kak koli pač naredima
-                    p.setUp_ime("test prijateljev");
-                    p.setId_uporabnika("5555");
-                    p.setId_prijatelja(u.get(0).getId());
+                    if(!u.get(0).getId().equals(idUp))
+                    {
+                        Prijatelji p = new Prijatelji();
+                        //vnese se s shranjene seje - kak koli pač naredima
+                        p.setUp_ime(u.get(0).getUpIme());
+                        p.setId_uporabnika(idUp);
+                        p.setId_prijatelja(u.get(0).getId());
 
-                    DodajPrijateljaTask task=new DodajPrijateljaTask();
-                    task.execute(p);
-
+                        DodajPrijateljaTask task=new DodajPrijateljaTask();
+                        task.execute(p);
+                        }
+                    else{
+                        Toast toast = Toast.makeText(getApplicationContext(), "Sebe ne morete dodati med prijatelje!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                 }
                 else{
                     Toast toast = Toast.makeText(getApplicationContext(), "Napačna koda!", Toast.LENGTH_SHORT);
@@ -281,8 +296,7 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
            // if (pDialog.isShowing())
             //    pDialog.dismiss();
             PridobiPrijateljeTask task=new PridobiPrijateljeTask();
-            //pridobi iz seje - po možnosti samo enkrat nekje - kak globalna spremenljivka
-            task.execute("5555");
+            task.execute(idUp);
 
 
         }
