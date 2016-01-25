@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
+import com.rvir.filmi.baza.sqlLite.PotrebnoSinhroniziratDataSource;
 import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
 import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
@@ -24,9 +25,12 @@ import java.util.ArrayList;
 
 public class FragmentPriljubljeni extends Fragment implements PriljubljeniInterface {
     private SeznamiDataSource seznamids;
+    private FilmiDataSource filmids;
+    private PotrebnoSinhroniziratDataSource sinhds;
     View view = null;
     private ArrayList<Film> priljubljeniFilmi = null;
     private boolean prijavljen=false;
+    private boolean registriran=false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,8 +41,15 @@ public class FragmentPriljubljeni extends Fragment implements PriljubljeniInterf
         if(sharedpreferences.getString("idUporabnika", null)!=null)
             prijavljen=true;
 
+        filmids=new FilmiDataSource(getContext());
+        filmids.open();
+
         seznamids = new SeznamiDataSource(getContext());
         seznamids.open();
+
+        sinhds=new PotrebnoSinhroniziratDataSource(getContext());
+        sinhds.open();
+        registriran=sinhds.registriran();
 
         GetPriljubljeniTask task = new GetPriljubljeniTask();
         task.execute();
@@ -104,14 +115,18 @@ public class FragmentPriljubljeni extends Fragment implements PriljubljeniInterf
     }
 
     @Override
-    public View remove(int idFilma, String idFilmaApi) {
+    public View remove(int idFilma, int idFilmaApi) {
         //async task za zbrisat film iz seznama, in pridobit cel seznam ter ga prikazati (isti postExecute kot pri getOGledaniTask
         System.out.println("remove" + idFilma);
         seznamids.odstraniSSeznama(idFilma, "priljubljen");
 
         if(prijavljen) {
             //preveri če ma internetno povezavo
-            DeleteTask dt = new DeleteTask(getActivity(), "2", idFilmaApi);
+            DeleteTask dt = new DeleteTask(getActivity(), "2", idFilmaApi+"");
+        }
+        else{
+            if(registriran)
+                sinhds.dodajSeznami(filmids.pridobiFilm(idFilmaApi), "2", "odstrani");
         }
         GetPriljubljeniTask task = new GetPriljubljeniTask();
         task.execute();

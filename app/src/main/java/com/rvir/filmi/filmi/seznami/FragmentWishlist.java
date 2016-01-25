@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 
 import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
+import com.rvir.filmi.baza.sqlLite.PotrebnoSinhroniziratDataSource;
 import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
 import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
@@ -24,10 +26,11 @@ import java.util.ArrayList;
 
 public class FragmentWishlist extends Fragment implements WishlistInterface{
     private SeznamiDataSource seznamids;
-    View view = null;
+    private FilmiDataSource filmids;
+    private PotrebnoSinhroniziratDataSource sinhds;    View view = null;
     private ArrayList<Film> zeljeniFilmi = null;
     private boolean prijavljen=false;
-
+    private boolean registriran=false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -37,8 +40,16 @@ public class FragmentWishlist extends Fragment implements WishlistInterface{
         if(sharedpreferences.getString("idUporabnika", null)!=null)
             prijavljen=true;
 
+        filmids=new FilmiDataSource(getContext());
+        filmids.open();
+
         seznamids = new SeznamiDataSource(getContext());
         seznamids.open();
+
+        sinhds=new PotrebnoSinhroniziratDataSource(getContext());
+        sinhds.open();
+        registriran=sinhds.registriran();
+        ;
 
         GetWishlistTask task = new GetWishlistTask();
         task.execute();
@@ -104,14 +115,20 @@ public class FragmentWishlist extends Fragment implements WishlistInterface{
     }
 
     @Override
-    public View remove(int idFilma, String idFilmaApi) {
+    public View remove(int idFilma, int idFilmaApi) {
         //async task za zbrisat film iz seznama, in pridobit cel seznam ter ga prikaati (isti postExecute kot pri getOGledaniTask
-        System.out.println("remove"+idFilma);
+        System.out.println("remove" + idFilma);
         seznamids.odstraniSSeznama(idFilma, "wish");
+        Film f= filmids.pridobiFilm(idFilmaApi);
+        Log.i("film", "id" + f.getIdFilmApi());
 
         if(prijavljen) {
             //preveri če ma internetno povezavo
-            DeleteTask dt = new DeleteTask(getActivity(), "3", idFilmaApi);
+            DeleteTask dt = new DeleteTask(getActivity(), "3", idFilmaApi+"");
+        }
+        else{
+            if(registriran)
+                sinhds.dodajSeznami(filmids.pridobiFilm(idFilmaApi), "3", "odstrani");
         }
         GetWishlistTask task = new GetWishlistTask();
         task.execute();

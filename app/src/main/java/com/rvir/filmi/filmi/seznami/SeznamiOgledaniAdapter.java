@@ -60,7 +60,7 @@ public class SeznamiOgledaniAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View view) {
-                ogledaniInterface.remove(Integer.parseInt(view.getTag(R.string.idFilma).toString()),view.getTag(R.string.idFilmaApi).toString());
+                ogledaniInterface.remove(Integer.parseInt(view.getTag(R.string.idFilma).toString()),Integer.parseInt(view.getTag(R.string.idFilmaApi).toString()));
             }
         });
 

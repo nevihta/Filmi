@@ -21,6 +21,7 @@ import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.beans.SeznamAzure;
 import com.rvir.filmi.baza.beans.Seznami;
 import com.rvir.filmi.baza.beans.Uporabniki;
+import com.rvir.filmi.baza.sqlLite.PotrebnoSinhroniziratDataSource;
 import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
 import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
@@ -41,6 +42,7 @@ public class Registracija extends AppCompatActivity {
     private MobileServiceTable<Uporabniki> mUporabnikiTable;
     private MobileServiceTable<SeznamAzure> mSeznamiTable;
     private SeznamiDataSource seznamds;
+    private PotrebnoSinhroniziratDataSource sinhds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,8 @@ public class Registracija extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        sinhds = new PotrebnoSinhroniziratDataSource(this);
+        sinhds.open();
         seznamds = new SeznamiDataSource(this);
         seznamds.open();
 
@@ -163,6 +167,7 @@ public class Registracija extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString("idUporabnika", id);
                 editor.commit();
+                sinhds.registriraj();
 
             } catch (Exception e) { }
             return id;

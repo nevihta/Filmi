@@ -28,6 +28,7 @@ import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.beans.SeznamAzure;
 import com.rvir.filmi.baza.beans.Uporabniki;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
+import com.rvir.filmi.baza.sqlLite.PotrebnoSinhroniziratDataSource;
 import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
 import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
@@ -46,9 +47,12 @@ public class FragmentOpis extends Fragment {
     private ImageView wishlist;
     private FilmiDataSource filmids;
     private SeznamiDataSource seznamids;
+    private PotrebnoSinhroniziratDataSource sinhds;
+
     Boolean baza;
     int id=0;
     private boolean prijavljen=false;
+    private boolean registriran=false;
     private String idUp;
 
     private MobileServiceClient mClient;
@@ -74,6 +78,12 @@ public class FragmentOpis extends Fragment {
 
         filmids = new FilmiDataSource(getContext());
         seznamids = new SeznamiDataSource(getContext());
+        sinhds=new PotrebnoSinhroniziratDataSource(getContext());
+        seznamids.open();
+        filmids.open();
+        sinhds.open();
+
+        registriran=sinhds.registriran();
 
         try {
             // Create the Mobile Service Client instance, using the provided
@@ -95,8 +105,7 @@ public class FragmentOpis extends Fragment {
 
         baza=true;
 
-        seznamids.open();
-        filmids.open();
+
         film=filmids.pridobiFilm(idFilma);
 
         if(film == null){
@@ -130,7 +139,6 @@ public class FragmentOpis extends Fragment {
 
 
         //add favourites
-        //manjka: if film ze na seznamu, slika x, else slika y
         priljubljeno = (ImageView) view.findViewById(R.id.fave);
         if(priljubljen){
             priljubljeno.setImageResource(R.drawable.filmi_heart);
@@ -154,6 +162,10 @@ public class FragmentOpis extends Fragment {
                         SinhronizacijaTask task = new SinhronizacijaTask();
                         task.execute("odstrani", "2", film.getIdFilmApi() + "");
                     }
+                   else{
+                        if(registriran)
+                            sinhds.dodajSeznami(film, "2", "odstrani");
+                   }
                }
                 else{
                    priljubljeno.setImageResource(R.drawable.filmi_heart);
@@ -166,6 +178,10 @@ public class FragmentOpis extends Fragment {
                        SinhronizacijaTask task = new SinhronizacijaTask();
                        task.execute("dodaj", "2", film.getIdFilmApi() + "", film.getNaslov());
                    }
+                   else{
+                       if(registriran)
+                           sinhds.dodajSeznami(film, "2", "dodaj");
+                   }
                }
             }
         });
@@ -174,12 +190,10 @@ public class FragmentOpis extends Fragment {
         ogledano = (ImageView) view.findViewById(R.id.watched);
         neOgledano = (ImageView) view.findViewById(R.id.notWatched);
 
-        if(ogledan){
+        if(ogledan)
             neOgledano.setVisibility(View.GONE);
-        }
-        else{
+        else
             ogledano.setVisibility(View.INVISIBLE);
-        }
 
         //listener - samo, ce doda na seznam ogledanih
         neOgledano.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +202,7 @@ public class FragmentOpis extends Fragment {
                 Log.i("v neogledano je", "T");
                 neOgledano.setVisibility(View.GONE);
                 ogledano.setVisibility(View.VISIBLE);
+                wishlist.setVisibility(View.GONE);
                 if (!baza)
                     id=filmids.dodajFilm(film);
                 seznamids.dodajNaSeznam(id, "ogledan");
@@ -195,7 +210,9 @@ public class FragmentOpis extends Fragment {
                     //if povezava
                     SinhronizacijaTask task = new SinhronizacijaTask();
                     task.execute("dodaj", "1", film.getIdFilmApi() + "", film.getNaslov());
-                    wishlist.setVisibility(View.GONE);
+                } else{
+                    if(registriran)
+                        sinhds.dodajSeznami(film, "1", "dodaj");
                 }
 
             }
@@ -231,6 +248,10 @@ public class FragmentOpis extends Fragment {
                         SinhronizacijaTask task = new SinhronizacijaTask();
                         task.execute("odstrani", "3", film.getIdFilmApi() + "");
                     }
+                    else{
+                        if(registriran)
+                            sinhds.dodajSeznami(film, "3", "odstrani");
+                    }
                 }
                 else {
                     wishlist.setImageResource(R.drawable.filmi_star);
@@ -242,6 +263,10 @@ public class FragmentOpis extends Fragment {
                         //if povezava
                         SinhronizacijaTask task = new SinhronizacijaTask();
                         task.execute("dodaj", "3", film.getIdFilmApi() + "", film.getNaslov());
+                    }
+                    else{
+                        if(registriran)
+                            sinhds.dodajSeznami(film, "3", "dodaj");
                     }
                 }
             }
@@ -348,9 +373,6 @@ public class FragmentOpis extends Fragment {
         @Override
         protected String doInBackground(String... argumenti) {
             try {
-
-
-               idUp="5555";
 
                 if(argumenti[0].equals("dodaj")){
                     SeznamAzure s = new SeznamAzure();

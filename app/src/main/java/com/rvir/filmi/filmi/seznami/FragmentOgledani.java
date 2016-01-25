@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
+import com.rvir.filmi.baza.sqlLite.PotrebnoSinhroniziratDataSource;
 import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
 import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
@@ -25,9 +26,13 @@ import java.util.ArrayList;
 
 public class FragmentOgledani extends Fragment implements OgledaniInterface{
     private SeznamiDataSource seznamids;
+    private FilmiDataSource filmids;
+    private PotrebnoSinhroniziratDataSource sinhds;
+
     View view = null;
     private ArrayList<Film> ogledaniFilmi = null;
     private boolean prijavljen=false;
+    private boolean registriran=false;
 
 
     @Override
@@ -39,8 +44,16 @@ public class FragmentOgledani extends Fragment implements OgledaniInterface{
         if(sharedpreferences.getString("idUporabnika", null)!=null)
             prijavljen=true;
 
+        filmids=new FilmiDataSource(getContext());
+        filmids.open();
+
         seznamids = new SeznamiDataSource(getContext());
         seznamids.open();
+
+        sinhds=new PotrebnoSinhroniziratDataSource(getContext());
+        sinhds.open();
+        registriran=sinhds.registriran();
+
 
         GetOgledaniTask task = new GetOgledaniTask();
         task.execute();
@@ -106,14 +119,18 @@ public class FragmentOgledani extends Fragment implements OgledaniInterface{
     }
 
     @Override
-    public View remove(int idFilma, String idFilmaApi) {
+    public View remove(int idFilma, int idFilmaApi) {
         //async task za zbrisat film iz seznama, in pridobit cel seznam ter ga prikaati (isti postExecute kot pri getOGledaniTask
         System.out.println("remove"+idFilma);
         seznamids.odstraniSSeznama(idFilma, "ogledan");
 
         if(prijavljen) {
             //preveri če ma internetno povezavo
-            DeleteTask dt = new DeleteTask(getActivity(), "1", idFilmaApi);
+            DeleteTask dt = new DeleteTask(getActivity(), "1", idFilmaApi+"");
+        }
+        else{
+            if(registriran)
+                sinhds.dodajSeznami(filmids.pridobiFilm(idFilmaApi), "1", "odstrani");
         }
         GetOgledaniTask task = new GetOgledaniTask();
         task.execute();
