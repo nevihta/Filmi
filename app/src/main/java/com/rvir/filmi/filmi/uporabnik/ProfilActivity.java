@@ -152,9 +152,9 @@ public class ProfilActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<ArrayList<SeznamAzure>> result) {
 
 
-            ArrayList<SeznamAzure> ogledani = result.get(0);
-            ArrayList<SeznamAzure> priljubljeni = result.get(1);
-            ArrayList<SeznamAzure> wish = result.get(2);
+            final ArrayList<SeznamAzure> ogledani = result.get(0);
+            final ArrayList<SeznamAzure> priljubljeni = result.get(1);
+            final ArrayList<SeznamAzure> wish = result.get(2);
 
             //izpis rezultatov
             //priljubljeni - 2 filma - ce jih nima - set gone view
@@ -162,11 +162,11 @@ public class ProfilActivity extends AppCompatActivity {
             fave1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
- /*                   int idFilma = getIdFilmApi();
+                    int idFilma = priljubljeni.get(0).getTkIdFilma();
                     Intent myIntent = new Intent(v.getContext(), FilmActivity.class);
                     myIntent.putExtra("id", (int) idFilma);
                     startActivity(myIntent);
- */
+
                 }
             });
 
@@ -174,11 +174,11 @@ public class ProfilActivity extends AppCompatActivity {
             fave2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
- /*                   int idFilma = getIdFilmApi();
+                    int idFilma = priljubljeni.get(1).getTkIdFilma();
                     Intent myIntent = new Intent(v.getContext(), FilmActivity.class);
                     myIntent.putExtra("id", (int) idFilma);
                     startActivity(myIntent);
- */               }
+               }
             });
 
              //ogledani - isto kot priljubljeni
@@ -186,22 +186,21 @@ public class ProfilActivity extends AppCompatActivity {
             watched1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
- /*                   int idFilma = getIdFilmApi();
+                    int idFilma = ogledani.get(0).getTkIdFilma();
                     Intent myIntent = new Intent(v.getContext(), FilmActivity.class);
                     myIntent.putExtra("id", (int) idFilma);
                     startActivity(myIntent);
- */
-                }
+ }
             });
             TextView watched2 = (TextView) findViewById(R.id.watched2);
             watched2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
- /*                   int idFilma = getIdFilmApi();
+                    int idFilma = ogledani.get(0).getTkIdFilma();
                     Intent myIntent = new Intent(v.getContext(), FilmActivity.class);
                     myIntent.putExtra("id", (int) idFilma);
                     startActivity(myIntent);
- */               }
+                }
             });
 
             //wishlist - isto kot prej
@@ -209,11 +208,11 @@ public class ProfilActivity extends AppCompatActivity {
             wish1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
- /*                 int idFilma = getIdFilmApi();
+                    int idFilma = wish.get(0).getTkIdFilma();
                     Intent myIntent = new Intent(v.getContext(), FilmActivity.class);
                     myIntent.putExtra("id", (int) idFilma);
                     startActivity(myIntent);
- */
+
                 }
             });
 
@@ -221,11 +220,11 @@ public class ProfilActivity extends AppCompatActivity {
             wish2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
- /*                 int idFilma = getIdFilmApi();
+                    int idFilma = wish.get(0).getTkIdFilma();
                     Intent myIntent = new Intent(v.getContext(), FilmActivity.class);
                     myIntent.putExtra("id", (int) idFilma);
                     startActivity(myIntent);
- */               }
+                }
             });
 
             //kritike?? manjka stran...
