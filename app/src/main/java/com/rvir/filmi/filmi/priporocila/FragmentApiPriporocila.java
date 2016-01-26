@@ -11,7 +11,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.rvir.filmi.baza.beans.Film;
+import com.rvir.filmi.baza.beans.Priporoci;
+import com.rvir.filmi.baza.beans.SeznamAzure;
+import com.rvir.filmi.baza.beans.Uporabniki;
+import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
 import com.rvir.filmi.filmi.R;
 import com.rvir.filmi.filmi.ServiceHandler;
 import com.rvir.filmi.filmi.film.FilmActivity;
@@ -27,14 +33,22 @@ import java.util.ArrayList;
 public class FragmentApiPriporocila extends Fragment {
     View view = null;
     private ArrayList<Film> priporoceniFilmi = null;
+    private SeznamiDataSource seznamids;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view =  inflater.inflate(R.layout.content_priporocila_fragment_api, container, false);
 
-        //pridobit neki random id filma iz seznama priljubljenih al pa ogledanih, ce nic na seznamu pa kaj?
-        String url = "https://api.themoviedb.org/3/movie/140607/similar?api_key=be86b39865e582aa63d877d88266bcfc";
+        seznamids=new SeznamiDataSource(getContext());
+        seznamids.open();
+        String url;
+        Film f=seznamids.pridobiRandomFilm();
+        if(f==null)
+            url = "http://api.themoviedb.org/3/movie/top_rated?api_key=be86b39865e582aa63d877d88266bcfc"; //pridobi top_rated
+        else
+            url = "https://api.themoviedb.org/3/movie/"+f.getIdFilmApi()+"/similar?api_key=be86b39865e582aa63d877d88266bcfc"; //pridobi podobne
 
         GetApiPriporoceniTask task = new GetApiPriporoceniTask();
         task.execute(url);

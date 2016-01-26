@@ -159,6 +159,34 @@ public class SeznamiDataSource {
         return seznami;
     }
 
+    public Film pridobiRandomFilm(){
+        Film f=new Film();
+
+        String sql = "select f.* from  " + SQLiteHelper.TABELA_FILMI + " f, " + SQLiteHelper.TABELA_SEZNAMI + " s, " + SQLiteHelper.TABELA_TIP_SEZNAM + " t " +
+                "  where f." + SQLiteHelper.ID_FILMA+ "=s." + SQLiteHelper.TK_ID_FILM_S + " and s." + SQLiteHelper.TK_ID_TIP + "= t." +
+                SQLiteHelper.ID_TIPA + " and t." + SQLiteHelper.NAZIV_T + "= 'priljubljen' ORDER BY RANDOM() LIMIT 1";
+        Cursor cursor = database.rawQuery(sql, null);
+
+        if((cursor!=null)&&(cursor.getCount()==1)){
+            cursor.moveToFirst();
+            f =cursorToFilm(cursor);
+        }
+        else{
+            sql = "select f.* from  " + SQLiteHelper.TABELA_FILMI + " f, " + SQLiteHelper.TABELA_SEZNAMI + " s, " + SQLiteHelper.TABELA_TIP_SEZNAM + " t " +
+                    "  where f." + SQLiteHelper.ID_FILMA+ "=s." + SQLiteHelper.TK_ID_FILM_S + " and s." + SQLiteHelper.TK_ID_TIP + "= t." +
+                    SQLiteHelper.ID_TIPA + " and t." + SQLiteHelper.NAZIV_T + "= 'wish' ORDER BY RANDOM() LIMIT 1";
+            cursor = database.rawQuery(sql, null);
+            if((cursor!=null)&&(cursor.getCount()==1)){
+                cursor.moveToFirst();
+                f =cursorToFilm(cursor);
+            }
+            else
+                f=null;
+        }
+
+        return f;
+    }
+
     private Film cursorToFilm(Cursor cursor) {
         Film film = new Film();
         film.setIdFilma(Integer.parseInt(cursor.getString(0)));

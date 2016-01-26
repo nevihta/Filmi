@@ -49,20 +49,19 @@ public class PriporocilaAdapter extends BaseAdapter {
         TextView title = (TextView) vi.findViewById(R.id.title);
         TextView oseba = (TextView) vi.findViewById(R.id.oseba);
 
-        Priporoci priporocilo = data.get(position);
+        final Priporoci priporocilo = data.get(position);
 
         // Setting all values in listview
         title.setText(priporocilo.getNaslov_f());
         oseba.setText(priporocilo.getUp_kdo());
 
         ImageView delete = (ImageView) vi.findViewById(R.id.delete);
-        delete.setTag(R.string.idFilma, new Integer(priporocilo.getId()));
-        delete.setTag(R.string.idFilmaApi, new Integer(priporocilo.getId_film()));
+        //delete.setTag(priporocilo);
         delete.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                priporocilaInterface.remove(Integer.parseInt(view.getTag(R.string.idFilma).toString()), Integer.parseInt(view.getTag(R.string.idFilmaApi).toString()));
+                priporocilaInterface.remove(priporocilo);
             }
         });
 

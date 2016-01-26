@@ -1,7 +1,9 @@
 package com.rvir.filmi.filmi.priporocila;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,21 +13,49 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.rvir.filmi.baza.beans.Film;
 import com.rvir.filmi.baza.beans.Priporoci;
+import com.rvir.filmi.baza.beans.SeznamAzure;
+import com.rvir.filmi.baza.beans.Uporabniki;
+import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
 import com.rvir.filmi.filmi.film.FilmActivity;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public class FragmentPrijateljiPriporocila extends Fragment implements PriporocilaInterface{
     View view = null;
     private ArrayList<Priporoci> priporoceniFilmi = null;
+    private MobileServiceClient mClient;
+    private MobileServiceTable<Priporoci> mPriporociTable;
+    String idUp="";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view =  inflater.inflate(R.layout.content_priporocila_fragment_prijatelji, container, false);
+
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
+        if(sharedpreferences.getString("idUporabnika", null)!=null)
+            idUp=sharedpreferences.getString("idUporabnika", null);
+
+
+        try {
+            // Create the Mobile Service Client instance, using the provided
+            mClient = new MobileServiceClient(
+                    "https://filmi.azure-mobile.net/",
+                    "RlptNyMuuAbjJOmVDoQYBmvhLUgjam37",
+                    getContext());
+            mPriporociTable = mClient.getTable(Priporoci.class);
+
+        } catch (MalformedURLException e) {
+            //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+        }
 
         GetPrijateljiPriporoceniTask task = new GetPrijateljiPriporoceniTask();
         task.execute();
@@ -34,7 +64,7 @@ public class FragmentPrijateljiPriporocila extends Fragment implements Priporoci
 
     }
 
-    private class GetPrijateljiPriporoceniTask extends AsyncTask<String, Void, ArrayList<Priporoci>> {
+    private class GetPrijateljiPriporoceniTask extends AsyncTask<String, Void, MobileServiceList<Priporoci>> {
         private ProgressDialog pDialog;
 
         @Override
@@ -48,22 +78,31 @@ public class FragmentPrijateljiPriporocila extends Fragment implements Priporoci
         }
 
         @Override
-        protected ArrayList<Priporoci> doInBackground(String... urls) {
-            priporoceniFilmi = new ArrayList<>();
-            Priporoci p = new Priporoci();
+        protected MobileServiceList<Priporoci> doInBackground(String... urls) {
+            MobileServiceList<Priporoci> result = null;
+
+            try {
+                result= mPriporociTable.where().field("id_komu").eq(idUp).execute().get();
+            } catch (Exception e) { }
+            return result;
+
+           /* Priporoci p = new Priporoci();
             p.setId("140607");p.setId_film("140607");p.setNaslov_f("Star Wars: The Force Awakens"); p.setUp_kdo("Anja");
             priporoceniFilmi.add(p);
             Priporoci f = new Priporoci(); f.setId("140607");f.setId_film("140607");f.setNaslov_f("Star Wars2: The Force Awakens"); f.setUp_kdo("Anja");
-            //pridobi priporocene filme iz baze =)
+            //pridobi priporocene filme iz baze =) //NEBOM!!
 
-            return priporoceniFilmi;
+            return result;*/
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Priporoci> result) {
+        protected void onPostExecute(MobileServiceList<Priporoci> result) {
             if(pDialog.isShowing())
                 pDialog.dismiss();
-           // izpis rezultatov
+
+            priporoceniFilmi = result;
+
+            // izpis rezultatov
             if(result.size()>0) {
                 ListView listView = ( ListView ) view.findViewById(R.id.listPrijateljiPriporocila);
                 PriporocilaAdapter pa = new PriporocilaAdapter(getActivity(), priporoceniFilmi, FragmentPrijateljiPriporocila.this);
@@ -75,7 +114,7 @@ public class FragmentPrijateljiPriporocila extends Fragment implements Priporoci
                         int idFilma = Integer.parseInt(priporoceniFilmi.get(position).getId_film());
 
                         Intent myIntent = new Intent(view.getContext(), FilmActivity.class);
-                        myIntent.putExtra("id", (int) idFilma);
+                        myIntent.putExtra("id", idFilma);
                         startActivity(myIntent);
 
                     }
@@ -86,9 +125,11 @@ public class FragmentPrijateljiPriporocila extends Fragment implements Priporoci
     }
 
     @Override
-    public View remove(int idPriporocila, int idFilmaApi) {
-        System.out.println("remove priporocilo "+idFilmaApi);
+    public View remove(Priporoci p) {
+       // System.out.println("remove priporocilo "+idFilmaApi);
       //odstrani iz seznama
+
+        mPriporociTable.delete(p);
 
         GetPrijateljiPriporoceniTask task = new GetPrijateljiPriporoceniTask();
         task.execute();

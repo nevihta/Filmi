@@ -37,6 +37,7 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
 
     private ArrayList<Prijatelji> prijatelji=null;
     private String idUp;
+    private String upIme;
 
     EditText koda;
 
@@ -63,6 +64,7 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
 
         SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
         idUp=sharedpreferences.getString("idUporabnika", null);
+        upIme=sharedpreferences.getString("upIme", null);
 
         try {
             // Create the Mobile Service Client instance, using the provided
@@ -194,6 +196,7 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
 
             try {
                 mPrijateljiTable.insert(p[0]).get();
+                mPrijateljiTable.insert(p[1]).get();
 
             } catch (Exception e) {
             }
@@ -241,19 +244,35 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
                 if (pDialog.isShowing())
                     pDialog.dismiss();
 
-                if(u.size()>0){
+                Log.i("up_id", u.get(0).getId());
+                Log.i("up_ime", u.get(0).getUpIme());
 
-                    //še mogoče preverjanje ka nemre dvakrat istoga dodati ;)
+                a:if(u.size()>0){
+                    //preveri, da ne dodaš istega up dvakrat
+                    for(int i =0; i<prijatelji.size(); i++){
+                        if(prijatelji.get(i).getId_prijatelja()==u.get(0).getId()){
+                            Toast toast = Toast.makeText(getApplicationContext(), "Prijatelja ste že dodali!", Toast.LENGTH_SHORT);
+                            toast.show();
+                            break a;
+                        }
+                    }
+
+                    //preveri da ne dodaš sebe ;)
                     if(!u.get(0).getId().equals(idUp))
                     {
                         Prijatelji p = new Prijatelji();
-                        //vnese se s shranjene seje - kak koli pač naredima
                         p.setUp_ime(u.get(0).getUpIme());
                         p.setId_uporabnika(idUp);
                         p.setId_prijatelja(u.get(0).getId());
 
+                        //še v obratno smer
+                        Prijatelji p2 = new Prijatelji();
+                        p2.setUp_ime(upIme);
+                        p2.setId_uporabnika(u.get(0).getId());
+                        p2.setId_prijatelja(idUp);
+
                         DodajPrijateljaTask task=new DodajPrijateljaTask();
-                        task.execute(p);
+                        task.execute(p, p2);
                         }
                     else{
                         Toast toast = Toast.makeText(getApplicationContext(), "Sebe ne morete dodati med prijatelje!", Toast.LENGTH_SHORT);
@@ -269,25 +288,19 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
             }
     }
     private class OdstraniPrijateljaTask extends AsyncTask<Prijatelji, Void, Prijatelji> {
-        private ProgressDialog pDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Showing progress dialog
-            //pDialog = new ProgressDialog(PrijateljiActivity.this);
-            //pDialog.setMessage("Prosimo počakajte...");
-            //pDialog.setCancelable(false);
-            //pDialog.show();
         }
 
         @Override
-        protected Prijatelji doInBackground(Prijatelji...p) {
+        protected Prijatelji doInBackground(Prijatelji ...p) {
 
             try {
-                Log.i("prijatelj je",p[0].getUp_ime() + p[0].getId()+"");
                 mPrijateljiTable.delete(p[0]);
-                Log.i("naredlo je", "upaaam");
+                MobileServiceList<Prijatelji> p2 = mPrijateljiTable.where().field("id_uporabnika").eq(p[0].getId_prijatelja()).and().field("id_prijatelja").eq(p[0].getId_uporabnika()).execute().get();
+                mPrijateljiTable.delete(p2.get(0));
 
             } catch (Exception e) {
             }
@@ -296,8 +309,7 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
 
         @Override
         protected void onPostExecute(Prijatelji p) {
-           // if (pDialog.isShowing())
-            //    pDialog.dismiss();
+
             PridobiPrijateljeTask task=new PridobiPrijateljeTask();
             task.execute(idUp);
 
