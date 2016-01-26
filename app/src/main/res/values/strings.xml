@@ -13,6 +13,8 @@
     <string name="title_activity_add_kritika">Dodaj Kritiko</string>
     <string name="title_activity_profil">Profil</string>
     <string name="title_activity_priporocila">Priporocila</string>
+    <string name="title_activity_seznam_prijateljev">Prijateljev seznam filmov</string>
+    <string name="title_activity_seznam_kritik">Vse kritike</string>
 
     <string name="idFilma">1</string>
     <string name="idFilmaApi">2</string>

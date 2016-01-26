@@ -24,6 +24,7 @@ import com.rvir.filmi.baza.beans.Uporabniki;
 import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
 import com.rvir.filmi.filmi.film.FilmActivity;
+import com.rvir.filmi.filmi.seznami.PrijateljevSeznamActivity;
 import com.rvir.filmi.filmi.seznami.SeznamiActivity;
 
 import java.lang.reflect.Array;
@@ -39,6 +40,7 @@ public class ProfilActivity extends AppCompatActivity {
     TextView upIme;
     String idProfila;
     private ProgressDialog pDialog;
+    private SharedPreferences sharedpreferences;
 
     private MobileServiceClient mClient;
     private MobileServiceTable<Uporabniki> mUporabnikiTable;
@@ -65,7 +67,7 @@ public class ProfilActivity extends AppCompatActivity {
         idProfila=getIntent().getExtras().getString("id");
         String imeP = getIntent().getExtras().getString("upIme");
 
-        SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
+        sharedpreferences = getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
         if(sharedpreferences.getString("idUporabnika", null)!=null)
             idUp=sharedpreferences.getString("idUporabnika", null);
 
@@ -234,9 +236,17 @@ public class ProfilActivity extends AppCompatActivity {
             moreFave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent myIntent = new Intent(v.getContext(), SeznamiActivity.class);
-                    myIntent.putExtra("OpenTab", 0);
-                    startActivity(myIntent);
+                    if(idProfila.equals(idUp)){
+                        Intent myIntent = new Intent(v.getContext(), SeznamiActivity.class);
+                        myIntent.putExtra("OpenTab", 0);
+                        startActivity(myIntent);
+                    }else{
+                        Intent myIntent = new Intent(v.getContext(), PrijateljevSeznamActivity.class);
+                        myIntent.putExtra("idPrijatelja", idUp);
+                        myIntent.putExtra("vrstaSeznama","fave");
+                        startActivity(myIntent);
+                    }
+
                 }
             });
 
@@ -244,9 +254,16 @@ public class ProfilActivity extends AppCompatActivity {
             moreWatched.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent myIntent = new Intent(v.getContext(), SeznamiActivity.class);
-                    myIntent.putExtra("OpenTab", 1);
-                    startActivity(myIntent);
+                    if(idProfila.equals(idUp)){
+                        Intent myIntent = new Intent(v.getContext(), SeznamiActivity.class);
+                        myIntent.putExtra("OpenTab", 1);
+                        startActivity(myIntent);
+                    }else{
+                        Intent myIntent = new Intent(v.getContext(), PrijateljevSeznamActivity.class);
+                        myIntent.putExtra("idPrijatelja", idUp);
+                        myIntent.putExtra("vrstaSeznama","watched");
+                        startActivity(myIntent);
+                    }
                 }
             });
 
@@ -254,9 +271,16 @@ public class ProfilActivity extends AppCompatActivity {
             moreWish.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent myIntent = new Intent(v.getContext(), SeznamiActivity.class);
-                    myIntent.putExtra("OpenTab", 2);
-                    startActivity(myIntent);
+                    if(idProfila.equals(idUp)){
+                        Intent myIntent = new Intent(v.getContext(), SeznamiActivity.class);
+                        myIntent.putExtra("OpenTab", 2);
+                        startActivity(myIntent);
+                    }else{
+                        Intent myIntent = new Intent(v.getContext(), PrijateljevSeznamActivity.class);
+                        myIntent.putExtra("idPrijatelja", idUp);
+                        myIntent.putExtra("vrstaSeznama","wish");
+                        startActivity(myIntent);
+                    }
                 }
             });
 
@@ -378,10 +402,8 @@ public class ProfilActivity extends AppCompatActivity {
             moreKritik.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //manjka stran za vse njegove kritike
-                    // Intent myIntent = new Intent(v.getContext(), AddKritikaActivity.class);
-                    // myIntent.putExtra("id", (int) film.getIdFilmApi()); //idFIlma ali idFIlmaApi??
-                    // startActivity(myIntent);
+                    Intent myIntent = new Intent(v.getContext(), SeznamKritikActivity.class);
+                    startActivity(myIntent);
                 }
             });
 
@@ -391,8 +413,8 @@ public class ProfilActivity extends AppCompatActivity {
                     kritika2.setVisibility(View.GONE);
                 }
                 else
-                    kritika2.setText("Kritika filma " + result.get(0).getNaslovF());
-                kritika1.setText("Kritika filma " + result.get(1).getNaslovF());
+                    kritika2.setText("Kritika filma " + result.get(1).getNaslovF());
+                kritika1.setText("Kritika filma " + result.get(0).getNaslovF());
             }
             else{
                 kritika2.setVisibility(View.GONE);

@@ -60,6 +60,14 @@
             android:label="@string/title_activity_priporocila"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity android:name=".seznami.PrijateljevSeznamActivity"
+            android:label="@string/title_activity_seznam_prijateljev"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity android:name=".uporabnik.SeznamKritikActivity"
+            android:label="@string/title_activity_seznam_kritik"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
