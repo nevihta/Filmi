@@ -174,6 +174,8 @@ public class Registracija extends AppCompatActivity {
                 SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString("idUporabnika", id);
+                editor.putString("upIme", up[0].getUpIme());
+                editor.putString("koda", up[0].getKoda());
                 editor.commit();
                 sinhds.registriraj();
 

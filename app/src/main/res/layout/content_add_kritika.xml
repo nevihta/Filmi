@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:numStars="5"
             android:stepSize="1.0"
-            android:rating="2.0"
+            android:rating="0.0"
             android:progressTint="#fee105"
             android:layout_below="@+id/title"
             android:layout_toEndOf="@+id/ocenalabel" />
@@ -56,6 +56,19 @@
             android:layout_below="@+id/ratingBar"
             android:layout_centerHorizontal="true"
             android:id="@+id/textView"
+            />
+
+        <TextView
+            android:text="Za dodajanje kritike morate biti prijavljeni!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="15dp"
+            android:visibility="gone"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/opomba"
             />
 
 

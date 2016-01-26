@@ -80,8 +80,22 @@ public class FilmiDataSource {
     public boolean spremeniMojoOceno(int id, String ocena){
         ContentValues newValues = new ContentValues();
         newValues.put(SQLiteHelper.MOJA_OCENA, ocena);
-        return database.update(SQLiteHelper.TABELA_FILMI, newValues, SQLiteHelper.ID_FILMA + "=" + id, null)>0;
+        return database.update(SQLiteHelper.TABELA_FILMI, newValues, SQLiteHelper.ID_FILMA_API + "=" + id, null)>0;
 
+    }
+
+    public String pridobiMojoOceno(int idFilma){
+        String ocena="0.0";
+        Cursor cursor =
+                database.rawQuery("SELECT " + SQLiteHelper.MOJA_OCENA + " from " + SQLiteHelper.TABELA_FILMI + " where "+ SQLiteHelper.ID_FILMA_API +" = " + idFilma, null);
+
+        if((cursor != null)&&(cursor.getCount()>0)){
+            cursor.moveToFirst();
+            ocena = cursor.getString(0);
+        }
+        cursor.close();
+
+        return ocena;
     }
 
     private Film cursorToFilm(Cursor cursor) {

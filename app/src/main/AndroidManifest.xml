@@ -44,7 +44,8 @@
         </activity>
         <activity android:name=".uporabnik.PrijateljiActivity"
             android:label="@string/title_activity_prijatelji"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity android:name=".film.AddKritikaActivity"
             android:label="@string/title_activity_add_kritika"

@@ -63,7 +63,7 @@ public class KritikeDataSource {
     public void DodajKritike(ArrayList<Kritika> kritike){
         ContentValues values = new ContentValues();
         for(Kritika k : kritike) {
-            values.put(SQLiteHelper.ID_KRITIKE_API, k.getIdKritikaApi());
+            //values.put(SQLiteHelper.ID_KRITIKE_API, k.getIdKritika());
             values.put(SQLiteHelper.BESEDILO, k.getBesedilo());
             values.put(SQLiteHelper.AVTOR, k.getAvtor());
             values.put(SQLiteHelper.TK_ID_FILM, k.getTkIdFilma());
@@ -73,7 +73,7 @@ public class KritikeDataSource {
 
     public void DodajKritiko(Kritika k){
         ContentValues values = new ContentValues();
-        values.put(SQLiteHelper.ID_KRITIKE_API, k.getIdKritikaApi());
+       // values.put(SQLiteHelper.ID_KRITIKE_API, k.getIdKritika());
         values.put(SQLiteHelper.BESEDILO, k.getBesedilo());
         values.put(SQLiteHelper.AVTOR, k.getAvtor());
         values.put(SQLiteHelper.TK_ID_FILM, k.getTkIdFilma());
@@ -83,10 +83,9 @@ public class KritikeDataSource {
 
     private Kritika cursorToKritika(Cursor cursor) {
         Kritika kritika= new Kritika();
-        kritika.setIdKritike(Integer.parseInt(cursor.getString(0)));
-        kritika.setIdKritikaApi(cursor.getString(1));
-        kritika.setBesedilo(cursor.getString(2));
-        kritika.setAvtor(cursor.getString(3));
+        kritika.setIdKritika(cursor.getString(0));
+        kritika.setBesedilo(cursor.getString(1));
+        kritika.setAvtor(cursor.getString(2));
         return kritika;
     }
 

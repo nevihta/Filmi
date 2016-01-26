@@ -104,7 +104,6 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:textSize="13dp"
-                android:text="Priljubljeni film 1"
                 />
 
         <RelativeLayout
@@ -120,7 +119,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="13dp"
                 android:clickable="true"
-                android:text="Priljubljeni film 3"
                 />
 
             <TextView
@@ -136,6 +134,19 @@
                 android:clickable="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:id="@+id/noneFave"
+                android:text="Uporabnik še ni dodal nobenega filma med priljubljene"
+                android:paddingTop="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13dp"
+                android:visibility="gone"
+                android:layout_alignParentTop="true"
+                 />
 
             </RelativeLayout>
 
@@ -168,7 +179,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="13dp"
                 android:clickable="true"
-                android:text="Ogledani film 1"
                 />
 
             <RelativeLayout
@@ -184,7 +194,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:clickable="true"
-                    android:text="Ogledani film 2"
                     />
 
                 <TextView
@@ -200,6 +209,19 @@
                     android:clickable="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true" />
+
+                <TextView
+                    android:id="@+id/noneWatched"
+                    android:text="Uporabnik si še ni ogledal nobenega filma"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:visibility="gone"
+                    android:layout_alignParentTop="true"
+                   />
 
             </RelativeLayout>
 
@@ -232,7 +254,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="13dp"
                 android:clickable="true"
-                android:text="Željeni film 1"
                 />
 
             <RelativeLayout
@@ -248,7 +269,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:clickable="true"
-                    android:text="Željeni film 2"
                     />
 
                 <TextView
@@ -264,6 +284,19 @@
                     android:clickable="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true" />
+
+                <TextView
+                    android:id="@+id/noneWish"
+                    android:text="Uporabnik nima nobenega filma na seznamu želja"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:visibility="gone"
+                    android:layout_alignParentTop="true"
+                   />
 
             </RelativeLayout>
 
@@ -296,7 +329,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="13dp"
                 android:clickable="true"
-                android:text="Kritika Filma cyz"
                 />
 
             <RelativeLayout
@@ -312,7 +344,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:clickable="true"
-                    android:text="Kritika Filma cya"
                     />
 
                 <TextView
@@ -328,6 +359,19 @@
                     android:clickable="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true" />
+
+                <TextView
+                    android:id="@+id/noneKritik"
+                    android:text="Uporabnik še ni dodal nobene kritike"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:visibility="gone"
+                    android:layout_alignParentTop="true"
+                    />
 
             </RelativeLayout>
 

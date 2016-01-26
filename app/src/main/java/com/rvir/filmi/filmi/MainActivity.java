@@ -28,6 +28,7 @@ import com.rvir.filmi.filmi.uporabnik.ProfilActivity;
 public class MainActivity extends AppCompatActivity {
     public static final String seja = "MyPrefs";
     private boolean prijavljen=false;
+    String idUp="";
 
 
     @Override
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         if(sharedpreferences.getString("idUporabnika", null)!=null)
         {
             prijavljen=true;
-            // Log.i("up je prijavljen",sharedpreferences.getString("idUporabnika", null));
+            idUp=sharedpreferences.getString("idUporabnika", null);
         }
 
         Log.i("prijavljen", prijavljen + "");
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), ProfilActivity.class);
+                i.putExtra("id", idUp);
                 startActivity(i);
             }
         });
@@ -126,11 +128,11 @@ public class MainActivity extends AppCompatActivity {
         if(!prijavljen) {
             prijatelji.setVisibility(View.GONE);
             prijava.setVisibility(View.VISIBLE);
-            //profil.setVisibility(View.GONE);
+            profil.setVisibility(View.GONE);
         }
         else{
             prijatelji.setVisibility(View.VISIBLE);
-            prijava.setVisibility(View.GONE);
+            //prijava.setVisibility(View.GONE);
             //profil.setVisibility(View.VISIBLE);
 
         }

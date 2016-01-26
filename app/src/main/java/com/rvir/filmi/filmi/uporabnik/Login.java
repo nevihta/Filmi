@@ -165,6 +165,8 @@ public class Login extends AppCompatActivity {
                 SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString("idUporabnika", up.get(0).getId());
+                editor.putString("upIme", up.get(0).getUpIme());
+                editor.putString("koda", up.get(0).getKoda());
                 editor.commit();
 
                 Log.i("idUp", up.get(0).getId());

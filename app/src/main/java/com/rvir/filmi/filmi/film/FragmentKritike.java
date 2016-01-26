@@ -22,6 +22,7 @@ import java.io.IOException;
 
 public class FragmentKritike extends Fragment {
     private Film film;
+    private FilmiDataSource filmids;
     View view = null;
 
     @Override
@@ -30,6 +31,9 @@ public class FragmentKritike extends Fragment {
         view =  inflater.inflate(R.layout.content_film_fragment_kritike, container, false);
         int idFilma = getActivity().getIntent().getExtras().getInt("id");
         System.out.println(idFilma);
+
+        filmids=new FilmiDataSource(getContext());
+        filmids.open();
 
         String url = "https://api.themoviedb.org/3/movie/"+idFilma+"?api_key=be86b39865e582aa63d877d88266bcfc&append_to_response=reviews";
 
@@ -60,6 +64,10 @@ public class FragmentKritike extends Fragment {
                 String input = new ServiceHandler().downloadURL(urls[0]);
                 System.out.println(urls[0]);
                 film =  filmParser.parseKritike(input);
+                //pridobi kritike z baze
+
+                String ocena=filmids.pridobiMojoOceno(film.getIdFilmApi());
+                film.setMojaOcena(ocena);
 
                 return film;
             } catch (IOException e) {
@@ -94,8 +102,11 @@ public class FragmentKritike extends Fragment {
                     @Override
                     public void onClick(View v) {
                     Intent myIntent = new Intent(v.getContext(), AddKritikaActivity.class);
-                     myIntent.putExtra("id", (int) film.getIdFilmApi()); //idFIlma ali idFIlmaApi??
-                     startActivity(myIntent);
+                        myIntent.putExtra("id", (int) film.getIdFilmApi()); //idFIlma ali idFIlmaApi?
+                        myIntent.putExtra("naslov", film.getNaslov());
+                        myIntent.putExtra("ocena", film.getMojaOcena());
+
+                        startActivity(myIntent);
                     }
                 });
 

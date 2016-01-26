@@ -166,11 +166,11 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Prijatelji prijatelj = prijatelji.get(position);
-
                     //na stran od prijatelja
-               /* Intent myIntent = new Intent(view.getContext(), FilmActivity.class);
-                myIntent.putExtra("id", prijatelj);
-                startActivity(myIntent);*/
+                    Intent myIntent = new Intent(view.getContext(), ProfilActivity.class);
+                    myIntent.putExtra("id", prijatelj.getId_prijatelja());
+                    myIntent.putExtra("upIme", prijatelj.getUp_ime());
+                    startActivity(myIntent);
 
                 }
             });
@@ -187,10 +187,6 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
         protected void onPreExecute() {
             super.onPreExecute();
             // Showing progress dialog
-            pDialog = new ProgressDialog(PrijateljiActivity.this);
-            pDialog.setMessage("Prosimo počakajte...");
-            pDialog.setCancelable(false);
-            pDialog.show();
         }
 
         @Override
@@ -206,8 +202,6 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
 
         @Override
         protected void onPostExecute(Prijatelji p) {
-            if (pDialog.isShowing())
-                pDialog.dismiss();
 
             TextView vnosKode = (TextView)findViewById(R.id.editKoda);
             vnosKode.setText(null);
