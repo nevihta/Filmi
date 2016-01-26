@@ -1,7 +1,9 @@
 package com.rvir.filmi.filmi.film;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -15,16 +17,20 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.rvir.filmi.baza.beans.Film;
+import com.rvir.filmi.baza.beans.Prijatelji;
+import com.rvir.filmi.baza.beans.Priporoci;
 import com.rvir.filmi.baza.beans.SeznamAzure;
 import com.rvir.filmi.baza.beans.Uporabniki;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
@@ -38,6 +44,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FragmentOpis extends Fragment {
     private Film film;
@@ -54,9 +61,12 @@ public class FragmentOpis extends Fragment {
     private boolean prijavljen=false;
     private boolean registriran=false;
     private String idUp;
+    private String upIme;
 
     private MobileServiceClient mClient;
     private MobileServiceTable<SeznamAzure> mSeznamiTable;
+    private MobileServiceTable<Prijatelji> mPrijateljiTable;
+    private MobileServiceTable<Priporoci> mPriporociTable;
 
     View view = null;
 
@@ -69,6 +79,8 @@ public class FragmentOpis extends Fragment {
         if(sharedpreferences.getString("idUporabnika", null)!=null){
             prijavljen=true;
             idUp=sharedpreferences.getString("idUporabnika", null);
+            upIme=sharedpreferences.getString("upIme", null);
+
         }
 
 
@@ -92,6 +104,8 @@ public class FragmentOpis extends Fragment {
                     "RlptNyMuuAbjJOmVDoQYBmvhLUgjam37",
                     getContext());
             mSeznamiTable = mClient.getTable(SeznamAzure.class);
+            mPrijateljiTable=mClient.getTable(Prijatelji.class);
+            mPriporociTable=mClient.getTable(Priporoci.class);
 
         } catch (MalformedURLException e) {
             //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
@@ -278,10 +292,12 @@ public class FragmentOpis extends Fragment {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //send recommendation
+
+                IzberiPrijateljaTask task= new IzberiPrijateljaTask();
+                task.execute();
+
             }
         });
-
 
         return view;
 
@@ -405,4 +421,102 @@ public class FragmentOpis extends Fragment {
         }
     }
 
+    private class IzberiPrijateljaTask extends AsyncTask<String, Void, ArrayList<Prijatelji>> {
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("on preExecte", "");
+            // Showing progress dialog
+            //pDialog = new ProgressDialog(Registracija.this);
+            //pDialog.setMessage("Registracija poteka...");
+            //pDialog.setCancelable(false);
+            //pDialog.show();
+        }
+
+        @Override
+        protected ArrayList<Prijatelji> doInBackground(String... argumenti) {
+            MobileServiceList<Prijatelji> p=null;
+
+            try {
+                    p=mPrijateljiTable.where().field("id_uporabnika").eq(idUp).execute().get();
+            } catch (Exception e) { }
+            return p;
+        }
+
+        @Override
+        protected void onPostExecute(final ArrayList<Prijatelji> p) {
+            //if(pDialog.isShowing())
+            //   pDialog.dismiss();
+            ArrayAdapter<Prijatelji> adapter = new ArrayAdapter<Prijatelji>(getContext(), android.R.layout.select_dialog_singlechoice);
+            for(int i=0; i<p.size(); i++)
+                adapter.add(p.get(i));
+
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Izberi prijatelja")
+                    .setSingleChoiceItems(adapter, -1, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            PriporociTask task=new PriporociTask();
+                            task.execute(p.get(which).getId_prijatelja());
+                            dialog.dismiss();
+
+                        }
+                    })
+                    /*.setPositiveButton("PRIPOROČI", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Log.i("klik", p.get(which).getId_prijatelja());
+                            PriporociTask task=new PriporociTask();
+                            task.execute(p.get(which).getId_prijatelja());
+                        }
+
+                    })*/
+                    .setNegativeButton("PREKLIČI", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+
+                        }
+                    }).show();
+        }
+    }
+
+    private class PriporociTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("on preExecte", "");
+
+        }
+
+        @Override
+        protected String doInBackground(String... argumenti) {
+
+            try {
+                Priporoci p = new Priporoci();
+                p.setId_kdo(idUp);
+                p.setUp_kdo(upIme);
+                p.setId_film(film.getIdFilmApi() + "");
+                p.setNaslov_f(film.getNaslov());
+                p.setId_komu(argumenti[0]);
+
+                mPriporociTable.insert(p);
+            } catch (Exception e) { }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String args) {
+            //if(pDialog.isShowing())
+            //   pDialog.dismiss();
+            Toast toast = Toast.makeText(getContext(), "Film je bil priporočen!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
 }

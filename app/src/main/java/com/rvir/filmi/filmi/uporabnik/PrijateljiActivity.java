@@ -243,6 +243,7 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
 
                 if(u.size()>0){
 
+                    //še mogoče preverjanje ka nemre dvakrat istoga dodati ;)
                     if(!u.get(0).getId().equals(idUp))
                     {
                         Prijatelji p = new Prijatelji();
