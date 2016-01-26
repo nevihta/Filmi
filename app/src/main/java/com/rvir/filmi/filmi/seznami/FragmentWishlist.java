@@ -27,7 +27,8 @@ import java.util.ArrayList;
 public class FragmentWishlist extends Fragment implements WishlistInterface{
     private SeznamiDataSource seznamids;
     private FilmiDataSource filmids;
-    private PotrebnoSinhroniziratDataSource sinhds;    View view = null;
+    private PotrebnoSinhroniziratDataSource sinhds;
+    View view = null;
     private ArrayList<Film> zeljeniFilmi = null;
     private boolean prijavljen=false;
     private boolean registriran=false;
@@ -41,15 +42,12 @@ public class FragmentWishlist extends Fragment implements WishlistInterface{
             prijavljen=true;
 
         filmids=new FilmiDataSource(getContext());
-        filmids.open();
 
         seznamids = new SeznamiDataSource(getContext());
-        seznamids.open();
 
         sinhds=new PotrebnoSinhroniziratDataSource(getContext());
         sinhds.open();
         registriran=sinhds.registriran();
-        ;
 
         GetWishlistTask task = new GetWishlistTask();
         task.execute();
@@ -69,6 +67,10 @@ public class FragmentWishlist extends Fragment implements WishlistInterface{
             //pDialog.setMessage("Prosimo, počakajte...");
             //pDialog.setCancelable(false);
             //pDialog.show();
+            filmids.open();
+            seznamids.open();
+
+
         }
 
         @Override
@@ -130,6 +132,8 @@ public class FragmentWishlist extends Fragment implements WishlistInterface{
             if(registriran)
                 sinhds.dodajSeznami(filmids.pridobiFilm(idFilmaApi), "3", "odstrani");
         }
+        filmids.close();
+        seznamids.close();
         GetWishlistTask task = new GetWishlistTask();
         task.execute();
         return view;

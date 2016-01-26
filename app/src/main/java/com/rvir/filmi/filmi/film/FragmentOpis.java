@@ -190,7 +190,7 @@ public class FragmentOpis extends Fragment {
                    if(prijavljen) {
                        //if povezava
                        SinhronizacijaTask task = new SinhronizacijaTask();
-                       task.execute("dodaj", "2", film.getIdFilmApi() + "", film.getNaslov());
+                       task.execute("dodaj", "2", film.getIdFilmApi() + "", film.getNaslov(), film.getUrlDoSlike());
                    }
                    else{
                        if(registriran)
@@ -223,7 +223,7 @@ public class FragmentOpis extends Fragment {
                 if(prijavljen) {
                     //if povezava
                     SinhronizacijaTask task = new SinhronizacijaTask();
-                    task.execute("dodaj", "1", film.getIdFilmApi() + "", film.getNaslov());
+                    task.execute("dodaj", "1", film.getIdFilmApi() + "", film.getNaslov(), film.getUrlDoSlike());
                 } else{
                     if(registriran)
                         sinhds.dodajSeznami(film, "1", "dodaj");
@@ -276,7 +276,7 @@ public class FragmentOpis extends Fragment {
                     if (prijavljen) {
                         //if povezava
                         SinhronizacijaTask task = new SinhronizacijaTask();
-                        task.execute("dodaj", "3", film.getIdFilmApi() + "", film.getNaslov());
+                        task.execute("dodaj", "3", film.getIdFilmApi() + "", film.getNaslov(), film.getUrlDoSlike());
                     }
                     else{
                         if(registriran)
@@ -285,6 +285,8 @@ public class FragmentOpis extends Fragment {
                 }
             }
         });
+
+
 
         Log.i("id filma", ""+ id);
         //recommend to friend
@@ -392,7 +394,7 @@ public class FragmentOpis extends Fragment {
 
                 if(argumenti[0].equals("dodaj")){
                     SeznamAzure s = new SeznamAzure();
-                    s=new SeznamAzure(Integer.parseInt(argumenti[1]), idUp, Integer.parseInt(argumenti[2]),argumenti[3]);
+                    s=new SeznamAzure(Integer.parseInt(argumenti[1]), idUp, Integer.parseInt(argumenti[2]),argumenti[3], argumenti[4]);
                     mSeznamiTable.insert(s);
                     if(argumenti[1].equals("1")){
                         MobileServiceList<SeznamAzure> sa;

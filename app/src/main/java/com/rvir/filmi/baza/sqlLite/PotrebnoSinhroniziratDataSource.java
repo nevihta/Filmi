@@ -19,8 +19,7 @@ public class PotrebnoSinhroniziratDataSource {
     private SQLiteHelper dbHelper;
 
     private static final String[] REGISTRIRAN_COLUMNS = {SQLiteHelper.ID_REG, SQLiteHelper.REGISTRIRAN};
-    private static final String[] SINH_SEZ_COLUMNS = {SQLiteHelper.ID_SINH_SEZ, SQLiteHelper.NASLOV_F, SQLiteHelper.ID_F, SQLiteHelper.ID_T};
-    private static final String[] SINH_KRIT_COLUMNS = {SQLiteHelper.ID_SINH_KRIT, SQLiteHelper.BESEDILO_SINH, SQLiteHelper.ID_F_TK, SQLiteHelper.VNOS};
+    private static final String[] SINH_SEZ_COLUMNS = {SQLiteHelper.ID_SINH_SEZ, SQLiteHelper.NASLOV_F, SQLiteHelper.ID_F, SQLiteHelper.ID_T, SQLiteHelper.URL_SLIKA, SQLiteHelper.AKCIJA};
 
     public PotrebnoSinhroniziratDataSource(Context context){
         dbHelper = new SQLiteHelper(context);
@@ -29,7 +28,11 @@ public class PotrebnoSinhroniziratDataSource {
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
-
+    @Override
+    protected void finalize() throws Throwable {
+        this.close();
+        super.finalize();
+    }
     public void close() {
         dbHelper.close();
     }
@@ -52,33 +55,33 @@ public class PotrebnoSinhroniziratDataSource {
         SeznamAzure s;
         Log.i("cursor size", cursor.getCount() + "");
         cursor.moveToFirst();
+        Log.i("cursor 0", cursor.getString(0));
+        Log.i("cursor 1", cursor.getString(1));
+        Log.i("cursor 2", cursor.getString(2));
+        Log.i("cursor 3", cursor.getString(3));
+        Log.i("cursor 4", cursor.getString(4));
+
         while (!cursor.isAfterLast()) {
             s=cursorToSeznam(cursor, idUp);
-            Log.i("naslov filma", s.getNaslovFilma());
-            Log.i("get string 3", cursor.getString(3));
-            if(cursor.getString(3).equals("odstrani"))
+            //Log.i("naslov filma", s.getNaslovFilma());
+            //Log.i("get string 3", cursor.getString(3));
+            if(cursor.getString(5).equals("odstrani"))
                 odstrani.add(s);
             else
                 dodaj.add(s);
             cursor.moveToNext();
     }
-        Log.i("dodaj size", dodaj.size()+"");
-        Log.i("odstrani site", odstrani.size() + "");
+        //Log.i("dodaj size", dodaj.size()+"");
+        //Log.i("odstrani site", odstrani.size() + "");
         sa.add(dodaj);
         sa.add(odstrani);
         return sa;
     }
 
-    public ArrayList pridobiKritikeZaSinhronizacijo(){
-
-        return null;
-    }
-
     public void izbrisiNaCakanju(){
         database.execSQL("DELETE FROM " + SQLiteHelper.TABELA_SINH_SEZNAMI);
         database.execSQL("VACUUM");
-        //database.execSQL("DELETE FROM " + SQLiteHelper.TABELA_SINH_KRITIKA);
-        //database.execSQL("VACUUM");
+
     }
 
     public boolean registriran(){
@@ -115,6 +118,7 @@ public class PotrebnoSinhroniziratDataSource {
         values.put(SQLiteHelper.NASLOV_F, film.getNaslov());
         values.put(SQLiteHelper.ID_F, film.getIdFilmApi());
         values.put(SQLiteHelper.ID_T, tk_tipa);
+        values.put(SQLiteHelper.URL_SLIKA, film.getUrlDoSlike());
         values.put(SQLiteHelper.AKCIJA, akcija);
         if(akcija.equals("dodaj")) {
             Log.i("sled", "dodaj");
@@ -164,6 +168,8 @@ public class PotrebnoSinhroniziratDataSource {
         s.setTkIdFilma(cursor.getInt(2));
         s.setTkIdTipa(cursor.getInt(3));
         s.setTkIdUporabnika(idUp);
+        s.setUrlSlika(cursor.getString(4));
+        Log.i("url slika", cursor.getString(4));
         return s;
     }
 }

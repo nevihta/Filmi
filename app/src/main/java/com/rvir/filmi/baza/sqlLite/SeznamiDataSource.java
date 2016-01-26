@@ -29,7 +29,11 @@ public class SeznamiDataSource {
     public void close() {
         dbHelper.close();
     }
-
+    @Override
+    protected void finalize() throws Throwable {
+        this.close();
+        super.finalize();
+    }
     public Seznami pridobiVseSezname(){
         Seznami s = new Seznami();
         s.setOgledani(pridobiOgledane());

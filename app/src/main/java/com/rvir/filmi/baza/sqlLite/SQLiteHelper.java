@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "FilmiDB";
 
     public static final String TABELA_FILMI = "filmi";
@@ -24,11 +24,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String SLIKA = "urlDoSlike";
     public static final String VIDEO = "urlDoVidea";
 
-    public static final String TABELA_KRITIKE = "kritike";
-    public static final String ID_KRITIKE= "id_kritike";
-    public static final String ID_KRITIKE_API = "id_kritike_api";
-    public static final String BESEDILO= "besedilo";
-    public static final String AVTOR = "avtor";
     public static final String TK_ID_FILM = "tk_id_film";
 
 
@@ -50,13 +45,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String NASLOV_F= "naslov_f";
     public static final String ID_F = "tk_id_filma";
     public static final String ID_T= "tk_id_tipa";
+    public static final String URL_SLIKA="url_do_slike";
     public static final String AKCIJA="akcija";
 
-    public static final String TABELA_SINH_KRITIKA = "sinh_kritika";
-    public static final String ID_SINH_KRIT = "id";
-    public static final String BESEDILO_SINH = "besedilo";
-    public static final String ID_F_TK= "tk_id_filma";
-    public static final String VNOS="cas_vnosa";
 
     public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -80,15 +71,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 VIDEO + " TEXT) ";
 
         db.execSQL(CREATE_FILMI_TABLE);
-
-        String CREATE_KRITIKE_TABLE = "CREATE TABLE "+ TABELA_KRITIKE +" ( " +
-                ID_KRITIKE+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ID_KRITIKE_API+" INTEGER, "+
-                BESEDILO+" TEXT, "+
-                AVTOR + " TEXT, " +
-                TK_ID_FILM + " INTEGER)";
-
-        db.execSQL(CREATE_KRITIKE_TABLE);
 
          String CREATE_TIP_SEZNAMA_TABLE = "CREATE TABLE "+ TABELA_TIP_SEZNAM +" ( " +
                 ID_TIPA +" INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -116,15 +98,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 NASLOV_F+" TEXT, " +
                 ID_F + " INTEGER, "+
                 ID_T + " INTEGER," +
+                URL_SLIKA + " TEXT, " +
                 AKCIJA + " TEXT) ";
         db.execSQL(CREATE_SINH_SEZNAM_TABLE);
 
-        String CREATE_SINH_KRITIKA_TABLE = "CREATE TABLE "+ TABELA_SINH_KRITIKA +" ( " +
-                ID_SINH_KRIT+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                BESEDILO_SINH+" TEXT, " +
-                ID_F_TK + " INTEGER, " +
-                VNOS + " TEXT)";
-        db.execSQL(CREATE_SINH_KRITIKA_TABLE);
 
         String CREATE_REGISTRACIJA_TABLE = "CREATE TABLE "+ TABELA_REGISTRACIJA + " ( " +
                 ID_REG + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -135,6 +112,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put(SQLiteHelper.REGISTRIRAN, "false");
         db.insert(SQLiteHelper.TABELA_REGISTRACIJA, null, values);
 
+
+
     }
 
     @Override
@@ -142,9 +121,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS "+ TABELA_SEZNAMI);
         db.execSQL("DROP TABLE IF EXISTS "+ TABELA_TIP_SEZNAM);
-        db.execSQL("DROP TABLE IF EXISTS "+ TABELA_KRITIKE);
         db.execSQL("DROP TABLE IF EXISTS "+ TABELA_FILMI);
-        db.execSQL("DROP TABLE IF EXISTS "+ TABELA_SINH_KRITIKA);
         db.execSQL("DROP TABLE IF EXISTS "+ TABELA_SINH_SEZNAMI);
         db.execSQL("DROP TABLE IF EXISTS " + TABELA_REGISTRACIJA);
 

@@ -80,6 +80,9 @@ public class FragmentKritike extends Fragment {
         protected void onPostExecute(Film result) {
             if(pDialog.isShowing())
                 pDialog.dismiss();
+
+            filmids.close();
+
             //izpis rezultatov
             if(result.getKritike().size()>0) {
                 //izpis

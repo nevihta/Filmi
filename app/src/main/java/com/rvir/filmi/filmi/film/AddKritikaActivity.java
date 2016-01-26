@@ -21,14 +21,12 @@ import android.widget.Toast;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.rvir.filmi.baza.beans.Kritika;
-import com.rvir.filmi.baza.beans.SeznamAzure;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
 import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
 
 import java.net.MalformedURLException;
 import java.sql.Timestamp;
-import java.util.Calendar;
 
 public class AddKritikaActivity extends AppCompatActivity  {
     int idFilmaApi = 0;
@@ -151,7 +149,6 @@ public class AddKritikaActivity extends AppCompatActivity  {
             System.out.println("mnenje: " + args[1]);
             System.out.println("apiFIlmaID: " + idFilmaApi);
 
-           // filmids.spremeniMojoOceno(idFilmaApi, args[0]);
 
             Kritika k= new Kritika();
             k.setAvtor(upIme);
@@ -160,7 +157,8 @@ public class AddKritikaActivity extends AppCompatActivity  {
             k.setTkIdFilma(idFilmaApi);
             k.setNaslovF(naslovF);
             java.util.Date date= new java.util.Date();
-            k.setVnos(new Timestamp(date.getTime())+"");
+            Log.i("timestamp", new Timestamp(date.getTime())+"");
+            //k.setVnos(cas);
             //Log.i("Cas je", k.getVnos().toString());
 
             mKritikaTable.insert(k);
@@ -200,12 +198,12 @@ public class AddKritikaActivity extends AppCompatActivity  {
             System.out.println("st_zvezdic" + args[0]);
 
             filmids.spremeniMojoOceno(idFilmaApi, args[0]);
-
             return null;
         }
 
         @Override
         protected void onPostExecute(String vBazi) {
+            filmids.close();
 
         }
     }

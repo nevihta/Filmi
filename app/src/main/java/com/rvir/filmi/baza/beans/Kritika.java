@@ -3,9 +3,10 @@ package com.rvir.filmi.baza.beans;
 
 import android.text.format.Time;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Kritika {
+public class Kritika  implements Serializable {
 
 
     @com.google.gson.annotations.SerializedName("id")

@@ -229,7 +229,6 @@ public class ProfilActivity extends AppCompatActivity {
                 }
             });
 
-            //kritike?? manjka stran...
 
             //nastavit na View.gone ce ni dovolj itemov v seznamu
             TextView moreFave = (TextView) findViewById(R.id.moreFave);
@@ -244,6 +243,7 @@ public class ProfilActivity extends AppCompatActivity {
                         Intent myIntent = new Intent(v.getContext(), PrijateljevSeznamActivity.class);
                         myIntent.putExtra("idPrijatelja", idUp);
                         myIntent.putExtra("vrstaSeznama","fave");
+                        myIntent.putExtra("seznam", priljubljeni);
                         startActivity(myIntent);
                     }
 
@@ -262,6 +262,7 @@ public class ProfilActivity extends AppCompatActivity {
                         Intent myIntent = new Intent(v.getContext(), PrijateljevSeznamActivity.class);
                         myIntent.putExtra("idPrijatelja", idUp);
                         myIntent.putExtra("vrstaSeznama","watched");
+                        myIntent.putExtra("seznam", ogledani);
                         startActivity(myIntent);
                     }
                 }
@@ -279,6 +280,7 @@ public class ProfilActivity extends AppCompatActivity {
                         Intent myIntent = new Intent(v.getContext(), PrijateljevSeznamActivity.class);
                         myIntent.putExtra("idPrijatelja", idUp);
                         myIntent.putExtra("vrstaSeznama","wish");
+                        myIntent.putExtra("seznam", wish);
                         startActivity(myIntent);
                     }
                 }
@@ -367,7 +369,7 @@ public class ProfilActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Kritika> result) {
+        protected void onPostExecute(final ArrayList<Kritika> result) {
             if(pDialog.isShowing())
                 pDialog.dismiss();
             TextView kritika1 = (TextView) findViewById(R.id.kritika1);
@@ -403,6 +405,7 @@ public class ProfilActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent myIntent = new Intent(v.getContext(), SeznamKritikActivity.class);
+                    myIntent.putExtra("kritike", result);
                     startActivity(myIntent);
                 }
             });

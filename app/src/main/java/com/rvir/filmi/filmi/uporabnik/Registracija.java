@@ -188,6 +188,7 @@ public class Registracija extends AppCompatActivity {
             if(pDialog.isShowing())
                 pDialog.dismiss();
 
+            sinhds.close();
             SinhronizacijaTask task = new SinhronizacijaTask();
             task.execute(id);
         }
@@ -221,17 +222,17 @@ public class Registracija extends AppCompatActivity {
 
 
                 for(int i=0; i<ogledani.size(); i++){
-                    s=new SeznamAzure(1, id[0], ogledani.get(i).getIdFilmApi(), ogledani.get(i).getNaslov());
+                    s=new SeznamAzure(1, id[0], ogledani.get(i).getIdFilmApi(), ogledani.get(i).getNaslov(), ogledani.get(i).getUrlDoSlike());
                     mSeznamiTable.insert(s);
                 }
                 Log.i("ogledani vstavljeni", "");
 
                 for(int i=0; i<priljubljeni.size(); i++){
-                    s=new SeznamAzure(2, id[0], priljubljeni.get(i).getIdFilmApi(), priljubljeni.get(i).getNaslov());
+                    s=new SeznamAzure(2, id[0], priljubljeni.get(i).getIdFilmApi(), priljubljeni.get(i).getNaslov(), priljubljeni.get(i).getUrlDoSlike());
                     mSeznamiTable.insert(s);
                 }
                 for(int i=0; i<wish.size(); i++){
-                    s=new SeznamAzure(3, id[0], wish.get(i).getIdFilmApi(), wish.get(i).getNaslov());
+                    s=new SeznamAzure(3, id[0], wish.get(i).getIdFilmApi(), wish.get(i).getNaslov(), wish.get(i).getUrlDoSlike());
                     mSeznamiTable.insert(s);
                 }
 
@@ -246,6 +247,7 @@ public class Registracija extends AppCompatActivity {
         protected void onPostExecute(String id) {
             //if(pDialog.isShowing())
              //   pDialog.dismiss();
+            seznamds.close();
 
         }
     }

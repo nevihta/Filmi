@@ -250,6 +250,7 @@ public class Login extends AppCompatActivity {
                 }
 
                 sinhds.izbrisiNaCakanju();
+                sinhds.close();
 
             } catch (Exception e) { }
             return null;

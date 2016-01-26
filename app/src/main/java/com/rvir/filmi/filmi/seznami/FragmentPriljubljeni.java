@@ -42,10 +42,8 @@ public class FragmentPriljubljeni extends Fragment implements PriljubljeniInterf
             prijavljen=true;
 
         filmids=new FilmiDataSource(getContext());
-        filmids.open();
 
         seznamids = new SeznamiDataSource(getContext());
-        seznamids.open();
 
         sinhds=new PotrebnoSinhroniziratDataSource(getContext());
         sinhds.open();
@@ -64,11 +62,9 @@ public class FragmentPriljubljeni extends Fragment implements PriljubljeniInterf
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Showing progress dialog
-            //pDialog = new ProgressDialog(getActivity());
-            //pDialog.setMessage("Prosimo, počakajte...");
-            //pDialog.setCancelable(false);
-            //pDialog.show();
+            filmids.open();
+            seznamids.open();
+
         }
 
         @Override
@@ -128,6 +124,9 @@ public class FragmentPriljubljeni extends Fragment implements PriljubljeniInterf
             if(registriran)
                 sinhds.dodajSeznami(filmids.pridobiFilm(idFilmaApi), "2", "odstrani");
         }
+        seznamids.close();
+        filmids.close();
+
         GetPriljubljeniTask task = new GetPriljubljeniTask();
         task.execute();
         return view;

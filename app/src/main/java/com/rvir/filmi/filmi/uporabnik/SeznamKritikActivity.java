@@ -45,8 +45,17 @@ public class SeznamKritikActivity extends AppCompatActivity {
         if(sharedpreferences.getString("idUporabnika", null)!=null)
             idUp=sharedpreferences.getString("idUporabnika", null);
 
-        GetSeznamKritikTask task = new GetSeznamKritikTask();
-        task.execute();
+
+        Intent i = getIntent();
+        ArrayList<Kritika> result = (ArrayList<Kritika>)i.getExtras().get("kritike");
+        if(result!=null) {
+            ListView listView = ( ListView ) findViewById(R.id.listVseKritike);
+            MojeKritikeAdapter ma = new MojeKritikeAdapter(SeznamKritikActivity.this, result);
+            listView.setAdapter(ma);
+
+        }
+       /* GetSeznamKritikTask task = new GetSeznamKritikTask();
+        task.execute();*/
 
 
     }

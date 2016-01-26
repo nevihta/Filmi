@@ -132,6 +132,7 @@ public class FragmentOgledani extends Fragment implements OgledaniInterface{
             if(registriran)
                 sinhds.dodajSeznami(filmids.pridobiFilm(idFilmaApi), "1", "odstrani");
         }
+
         GetOgledaniTask task = new GetOgledaniTask();
         task.execute();
 

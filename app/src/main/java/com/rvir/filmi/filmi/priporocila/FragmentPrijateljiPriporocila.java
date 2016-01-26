@@ -86,13 +86,6 @@ public class FragmentPrijateljiPriporocila extends Fragment implements Priporoci
             } catch (Exception e) { }
             return result;
 
-           /* Priporoci p = new Priporoci();
-            p.setId("140607");p.setId_film("140607");p.setNaslov_f("Star Wars: The Force Awakens"); p.setUp_kdo("Anja");
-            priporoceniFilmi.add(p);
-            Priporoci f = new Priporoci(); f.setId("140607");f.setId_film("140607");f.setNaslov_f("Star Wars2: The Force Awakens"); f.setUp_kdo("Anja");
-            //pridobi priporocene filme iz baze =) //NEBOM!!
-
-            return result;*/
         }
 
         @Override
