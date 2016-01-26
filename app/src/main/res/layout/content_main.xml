@@ -46,6 +46,7 @@
         android:layout_weight="1" >
 
         <Button
+            android:id="@+id/buttonPriporoci"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"

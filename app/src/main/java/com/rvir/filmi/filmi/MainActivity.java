@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.rvir.filmi.filmi.filmi.FilmiActivity;
+import com.rvir.filmi.filmi.priporocila.PriporocilaActivity;
 import com.rvir.filmi.filmi.seznami.SeznamiActivity;
 import com.rvir.filmi.filmi.uporabnik.Login;
 import com.rvir.filmi.filmi.uporabnik.PrijateljiActivity;
@@ -90,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), Login.class);
+                startActivity(i);
+            }
+        });
+
+        Button priporoci = (Button) findViewById(R.id.buttonPriporoci);
+        priporoci.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), PriporocilaActivity.class);
                 startActivity(i);
             }
         });
