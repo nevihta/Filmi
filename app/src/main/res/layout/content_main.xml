@@ -52,7 +52,7 @@
             android:layout_weight="1"
             android:paddingTop="20dip"
             android:drawableTop="@drawable/filmi_home_movies2"
-            android:text="Predlagaj film"
+            android:text="Priporočeni filmi"
             android:background="#e58c38"
             android:layout_margin="10dp"
             android:textColor="#fef8f8"/>

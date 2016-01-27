@@ -31,8 +31,8 @@ public class PriporocilaActivity extends AppCompatActivity {
         });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Priporočeno"));
-        tabLayout.addTab(tabLayout.newTab().setText("Filmi od prijateljev"));
+        tabLayout.addTab(tabLayout.newTab().setText("Za vas"));
+        tabLayout.addTab(tabLayout.newTab().setText("Priporočila prijateljev"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);

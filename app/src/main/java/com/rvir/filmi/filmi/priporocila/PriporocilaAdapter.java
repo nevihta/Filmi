@@ -47,14 +47,15 @@ public class PriporocilaAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.custom_priporocila_prijatelji_list, null);
 
         TextView title = (TextView) vi.findViewById(R.id.title);
-        TextView oseba = (TextView) vi.findViewById(R.id.oseba);
+        //TextView movie = (TextView) vi.findViewById(R.id.movie);
 
         final Priporoci priporocilo = data.get(position);
 
+        String message = "Oseba "+priporocilo.getUp_kdo()+" vam je priporočila ogled filma "+priporocilo.getNaslov_f();
         // Setting all values in listview
-        title.setText(priporocilo.getNaslov_f());
-        oseba.setText(priporocilo.getUp_kdo());
 
+        title.setText(message);
+        //movie.setText(priporocilo.getNaslov_f());
         ImageView delete = (ImageView) vi.findViewById(R.id.delete);
         //delete.setTag(priporocilo);
         delete.setOnClickListener(new View.OnClickListener() {

@@ -50,7 +50,7 @@ public class FragmentApiPriporocila extends Fragment {
         else
             url = "https://api.themoviedb.org/3/movie/"+f.getIdFilmApi()+"/similar?api_key=be86b39865e582aa63d877d88266bcfc"; //pridobi podobne
 
-
+System.out.println(url);
         seznamids.close();
         GetApiPriporoceniTask task = new GetApiPriporoceniTask();
         task.execute(url);
