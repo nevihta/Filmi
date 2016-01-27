@@ -96,7 +96,20 @@ public class SeznamKritikActivity extends AppCompatActivity {
                 MojeKritikeAdapter ma = new MojeKritikeAdapter(SeznamKritikActivity.this, vseKritike);
                 listView.setAdapter(ma);
 
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        int idFilma = vseKritike.get(position).getTkIdFilma();
+                        System.out.print(idFilma);
+                        Intent myIntent = new Intent(view.getContext(), FilmActivity.class);
+                        myIntent.putExtra("id", (int) idFilma);
+                        startActivity(myIntent);
+
+                    }
+                });
             }
+
+
 
         }
     }

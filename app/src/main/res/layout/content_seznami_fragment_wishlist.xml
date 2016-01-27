@@ -11,7 +11,9 @@
         android:text="Filmi, ki si jih želim ogledati"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#235cd6"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
 
     <ListView
         android:id="@+id/listWishlist"
