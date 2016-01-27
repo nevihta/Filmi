@@ -22,7 +22,6 @@ import com.rvir.filmi.filmi.filmi.FilmiAdapter;
 import java.util.ArrayList;
 
 public class SeznamKritikActivity extends AppCompatActivity {
-    ArrayList<Kritika> vseKritike = null;
     private String idUp;
 
     @Override
@@ -47,71 +46,23 @@ public class SeznamKritikActivity extends AppCompatActivity {
 
 
         Intent i = getIntent();
-        ArrayList<Kritika> result = (ArrayList<Kritika>)i.getExtras().get("kritike");
+        final ArrayList<Kritika> result = (ArrayList<Kritika>)i.getExtras().get("kritike");
         if(result!=null) {
             ListView listView = ( ListView ) findViewById(R.id.listVseKritike);
             MojeKritikeAdapter ma = new MojeKritikeAdapter(SeznamKritikActivity.this, result);
             listView.setAdapter(ma);
 
-        }
-       /* GetSeznamKritikTask task = new GetSeznamKritikTask();
-        task.execute();*/
-
-
-    }
-
-    private class GetSeznamKritikTask extends AsyncTask<String, Void, ArrayList<Kritika>> {
-        private ProgressDialog pDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // Showing progress dialog
-            pDialog = new ProgressDialog(SeznamKritikActivity.this);
-            pDialog.setMessage("Prosimo, počakajte...");
-            pDialog.setCancelable(false);
-            pDialog.show();
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int idFilma = result.get(position).getTkIdFilma();
+                    System.out.print(idFilma);
+                    Intent myIntent = new Intent(view.getContext(), FilmActivity.class);
+                    myIntent.putExtra("id", (int) idFilma);
+                    startActivity(myIntent);}
+            });
         }
 
-        @Override
-        protected ArrayList<Kritika> doInBackground(String... urls) {
 
-           //pridobi seznam iz baze
-            vseKritike = new ArrayList<>();
-            Kritika f = new Kritika(); f.setNaslovF("star wars");f.setBesedilo(" To je moja kritika blablabla");
-            vseKritike.add(f);
-            Kritika ff = new Kritika(); ff.setNaslovF("star wars2");ff.setBesedilo(" To je moja kritika2 blablabla. Delaaa");
-            vseKritike.add(ff);
-
-            return vseKritike;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Kritika> result) {
-            if(pDialog.isShowing())
-                pDialog.dismiss();
-            //izpis rezultatov
-            if(result!=null) {
-                ListView listView = ( ListView ) findViewById(R.id.listVseKritike);
-                MojeKritikeAdapter ma = new MojeKritikeAdapter(SeznamKritikActivity.this, vseKritike);
-                listView.setAdapter(ma);
-
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        int idFilma = vseKritike.get(position).getTkIdFilma();
-                        System.out.print(idFilma);
-                        Intent myIntent = new Intent(view.getContext(), FilmActivity.class);
-                        myIntent.putExtra("id", (int) idFilma);
-                        startActivity(myIntent);
-
-                    }
-                });
-            }
-
-
-
-        }
-    }
-
+}
 }

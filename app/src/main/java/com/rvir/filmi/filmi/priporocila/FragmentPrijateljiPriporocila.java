@@ -95,8 +95,7 @@ public class FragmentPrijateljiPriporocila extends Fragment implements Priporoci
 
             priporoceniFilmi = result;
 
-            // izpis rezultatov
-            if(result.size()>0) {
+
                 ListView listView = ( ListView ) view.findViewById(R.id.listPrijateljiPriporocila);
                 PriporocilaAdapter pa = new PriporocilaAdapter(getActivity(), priporoceniFilmi, FragmentPrijateljiPriporocila.this);
                 listView.setAdapter(pa);
@@ -112,7 +111,7 @@ public class FragmentPrijateljiPriporocila extends Fragment implements Priporoci
 
                     }
                 });
-            }
+
 
         }
     }

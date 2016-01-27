@@ -14,9 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.rvir.filmi.baza.beans.Film;
+import com.rvir.filmi.baza.beans.Kritika;
+import com.rvir.filmi.baza.beans.SeznamAzure;
 import com.rvir.filmi.baza.beans.Seznami;
+import com.rvir.filmi.baza.beans.Uporabniki;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
 import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
 import com.rvir.filmi.filmi.MainActivity;
@@ -25,6 +32,7 @@ import com.rvir.filmi.filmi.ServiceHandler;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public class FragmentKritike extends Fragment {
@@ -33,6 +41,11 @@ public class FragmentKritike extends Fragment {
     private SeznamiDataSource seznamids;
     View view = null;
     Boolean prijavljen=false;
+    int idFilma;
+    private ProgressDialog pDialog;
+    private MobileServiceClient mClient;
+    private MobileServiceTable<Kritika> mKritikaTable;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,7 +56,18 @@ public class FragmentKritike extends Fragment {
             prijavljen = true;
         }
 
-        int idFilma = getActivity().getIntent().getExtras().getInt("id");
+
+        try {         // Create the Mobile Service Client instance, using the provided
+            mClient = new MobileServiceClient(
+                    "https://filmi.azure-mobile.net/",
+                    "RlptNyMuuAbjJOmVDoQYBmvhLUgjam37",
+                    getContext());
+            mKritikaTable = mClient.getTable(Kritika.class);
+        } catch (MalformedURLException e) {
+            //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+        }
+
+        idFilma = getActivity().getIntent().getExtras().getInt("id");
         System.out.println(idFilma);
 
         filmids=new FilmiDataSource(getContext());
@@ -61,7 +85,7 @@ public class FragmentKritike extends Fragment {
     }
 
     private class GetJSONKritikeTask extends AsyncTask<String, Void, Film> {
-        private ProgressDialog pDialog;
+
 
         @Override
         protected void onPreExecute() {
@@ -85,7 +109,6 @@ public class FragmentKritike extends Fragment {
                 String ocena = filmids.pridobiMojoOceno(film.getIdFilmApi());
                 film.setMojaOcena(ocena);
 
-                //pridobi mojo kritiko, dodaj na zacetek seznama kritik
 
                 return film;
             } catch (IOException e) {
@@ -96,9 +119,6 @@ public class FragmentKritike extends Fragment {
 
         @Override
         protected void onPostExecute(Film result) {
-            if (pDialog.isShowing())
-                pDialog.dismiss();
-
 
             //izpis rezultatov
             if (result.getKritike().size() > 0) {
@@ -136,8 +156,13 @@ public class FragmentKritike extends Fragment {
                     }
                 });
 
-               /* ImageView slikica = (ImageView) view.findViewById(R.id.write);
-                ArrayList<String> seznami = seznamids.vrniSeznameNaKaterihJeFilm(film.getIdFilma());
+                ImageView slikica = (ImageView) view.findViewById(R.id.write);
+               if(!prijavljen){
+                   slikica.setVisibility(View.GONE);
+                   novaKritika.setVisibility(View.GONE);
+               }
+
+               /* ArrayList<String> seznami = seznamids.vrniSeznameNaKaterihJeFilm(film.getIdFilma());
                 Log.i("velikost", seznami.size()+"");
 
                 if (prijavljen) {
@@ -150,15 +175,51 @@ public class FragmentKritike extends Fragment {
 
                     }
                 }*/
-                    //kritike
+                    PridobiKritikeTask task= new PridobiKritikeTask();
+                    task.execute(idFilma + "");
 
-                    //prva kritika na seznamu naj bo od uporabnika (ce obstaja seveda)
-                    ListView listView = (ListView) view.findViewById(R.id.listKritike);
-                    KritikeAdapter ka = new KritikeAdapter(getActivity(), film.getKritike());
-                    listView.setAdapter(ka);
                 }
 
             }
         }
+
+    private class PridobiKritikeTask extends AsyncTask<String, Void, MobileServiceList<Kritika>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+        }
+
+        @Override
+        protected MobileServiceList<Kritika> doInBackground(String...strings) {
+            MobileServiceList<Kritika> result=null;
+
+            try {
+                result= mKritikaTable.where().field("tk_id_filma").eq(strings[0]).execute().get();
+
+            } catch (Exception e) {
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(MobileServiceList<Kritika> krit) {
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+
+            ArrayList<Kritika> kr=film.getKritike();
+            for(int i=0; i<krit.size(); i++)
+                kr.add(0, krit.get(i));
+
+            //prva kritika na seznamu naj bo od uporabnika (ce obstaja seveda)
+            ListView listView = (ListView) view.findViewById(R.id.listKritike);
+            KritikeAdapter ka = new KritikeAdapter(getActivity(), kr);
+            listView.setAdapter(ka);
+
+
+        }
+    }
 
     }

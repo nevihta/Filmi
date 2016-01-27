@@ -223,18 +223,17 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
                     pDialog.dismiss();
 
                 a:if(u.size()>0){
-                    //preveri, da ne dodaš istega up dvakrat
-                    for(int i =0; i<prijatelji.size(); i++){
-                        if(prijatelji.get(i).getId_prijatelja()==u.get(0).getId()){
-                            Toast toast = Toast.makeText(getApplicationContext(), "Prijatelja ste že dodali!", Toast.LENGTH_SHORT);
-                            toast.show();
-                            break a;
-                        }
-                    }
-
                     //preveri da ne dodaš sebe ;)
                     if(!u.get(0).getId().equals(idUp))
                     {
+                        //preveri, da ne dodaš istega up dvakrat
+                        for(int i =0; i<prijatelji.size(); i++) {
+                            if (prijatelji.get(i).getId_prijatelja().equals(u.get(0).getId())) {
+                                Toast toast = Toast.makeText(getApplicationContext(), "Prijatelja ste že dodali!", Toast.LENGTH_SHORT);
+                                toast.show();
+                                break a;
+                            }
+                        }
                         Prijatelji p = new Prijatelji();
                         p.setUp_ime(u.get(0).getUpIme());
                         p.setId_uporabnika(idUp);
@@ -253,12 +252,12 @@ public class PrijateljiActivity extends AppCompatActivity implements PrijateljiI
                         Toast toast = Toast.makeText(getApplicationContext(), "Sebe ne morete dodati med prijatelje!", Toast.LENGTH_SHORT);
                         toast.show();
                     }
+
                 }
                 else{
                     Toast toast = Toast.makeText(getApplicationContext(), "Napačna koda!", Toast.LENGTH_SHORT);
                     toast.show();
                 }
-
 
             }
     }
