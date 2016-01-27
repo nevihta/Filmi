@@ -142,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             prijatelji.setVisibility(View.VISIBLE);
-            //prijava.setVisibility(View.GONE);
-            //profil.setVisibility(View.VISIBLE);
+            prijava.setVisibility(View.GONE);
+            profil.setVisibility(View.VISIBLE);
 
         }
 

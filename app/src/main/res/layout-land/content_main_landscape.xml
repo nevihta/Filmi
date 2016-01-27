@@ -29,12 +29,13 @@
 
 
         <Button
+            android:id="@+id/buttonPriporoci"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:paddingTop="20dip"
             android:drawableTop="@drawable/filmi_home_movies2"
-            android:text="Predlagaj film"
+            android:text="Priporočeni filmi"
             android:background="#e58c38"
             android:layout_margin="10dp"
             android:textColor="#fef8f8"/>
@@ -65,6 +66,7 @@
 
 
         <Button
+            android:id="@+id/home_search"
             android:layout_width="0dip"
             android:paddingTop="20dip"
             android:drawableTop="@drawable/filmi_home_search"
@@ -85,7 +87,8 @@
             android:background="#303F9F"
             android:layout_margin="10dp"
             android:text="Prijatelji"
-            android:textColor="#fef8f8"/>
+            android:textColor="#fef8f8"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/buttonPrijava"
@@ -97,6 +100,19 @@
             android:background="#e58c38"
             android:layout_margin="10dp"
             android:text="Prijava"
+            android:textColor="#fef8f8"/>
+
+        <Button
+            android:id="@+id/buttonProfil"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="20dip"
+            android:drawableTop="@drawable/filmi_home_profile"
+            android:background="#e58c38"
+            android:layout_margin="10dp"
+            android:text="Profil"
+            android:visibility="visible"
             android:textColor="#fef8f8"/>
     </LinearLayout>
 </LinearLayout>

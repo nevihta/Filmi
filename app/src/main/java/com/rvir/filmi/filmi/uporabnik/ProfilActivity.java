@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
@@ -97,11 +98,23 @@ public class ProfilActivity extends AppCompatActivity {
 
         koda.setText(k);
         upIme.setText(imeP);
-
+        Button buttonOdjava = (Button) findViewById(R.id.buttonOdjava);
         if(!mojProfil){
             textId.setVisibility(View.INVISIBLE);
             koda.setVisibility(View.INVISIBLE);
+            buttonOdjava.setVisibility(View.INVISIBLE);
         }
+        buttonOdjava.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.clear();
+                editor.commit();
+                Intent i = new Intent(v.getContext(), MainActivity.class);
+                startActivity(i);
+            }
+        });
 
         GetSeznamiTask task = new GetSeznamiTask();
         task.execute(idProfila);

@@ -116,19 +116,6 @@ public class Login extends AppCompatActivity {
 
         }
 
-
-        TextView odjava = (TextView) findViewById(R.id.OdjavaButton);
-        odjava.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.clear();
-                editor.commit();
-                Intent i = new Intent(v.getContext(), MainActivity.class);
-                startActivity(i);
-            }
-        });
     }
 
     private class PrijavaTask extends AsyncTask<String, Void, MobileServiceList<Uporabniki>> {
@@ -182,28 +169,6 @@ public class Login extends AppCompatActivity {
             }
 
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private class SinhronizacijaTask extends AsyncTask<String, Void, String> {
