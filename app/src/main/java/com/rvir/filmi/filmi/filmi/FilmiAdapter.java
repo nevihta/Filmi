@@ -45,15 +45,18 @@ public class FilmiAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.custom_filmi_list, null);
 
         TextView title = (TextView) vi.findViewById(R.id.txt);
+        TextView ocena = (TextView) vi.findViewById(R.id.oc);
         ImageView imageIcon = (ImageView)vi.findViewById(R.id.flag);
 
         Film film = data.get(position);
 
         // Setting all values in listview
         title.setText(film.getNaslov());
+        ocena.setText(film.getOcena());
+
         Picasso.with(activity.getBaseContext())
                 .load(film.getUrlDoSlike())
-                .resize(150, 150)
+                .resize(120, 150)
                 .into(imageIcon);
         return vi;
     }

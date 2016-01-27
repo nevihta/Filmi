@@ -43,7 +43,7 @@ public class FragmentIskanje extends Fragment {
             public void onClick(View v) {
                 searchText = (EditText) view.findViewById(R.id.searchText);
 
-                String url = "http://api.themoviedb.org/3/search/movie?api_key=be86b39865e582aa63d877d88266bcfc&query="+ searchText.getText().toString();
+                String url = "http://api.themoviedb.org/3/search/movie?api_key=be86b39865e582aa63d877d88266bcfc&query="+ searchText.getText().toString().replace(" ","%20");
 
                 GetJSONIskanjeTask task = new GetJSONIskanjeTask();
                 task.execute(url);

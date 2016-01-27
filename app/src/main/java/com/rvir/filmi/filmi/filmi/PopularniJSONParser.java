@@ -29,7 +29,7 @@ public class PopularniJSONParser {
                 film.setIdFilmApi(jObject.getInt("id"));
                 film.setNaslov(jObject.getString("title"));
                 film.setUrlDoSlike("http://image.tmdb.org/t/p/w500" + jObject.getString("poster_path"));
-
+                film.setOcena(jObject.getString("vote_average"));
                 popularniFilmi.add(film);
             }
 

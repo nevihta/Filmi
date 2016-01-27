@@ -349,7 +349,7 @@ public class FragmentOpis extends Fragment {
         }
     }
 
-    private void napolniView(Film film){
+    private void napolniView(final Film film){
 
             ImageView imageView = (ImageView) view.findViewById(R.id.poster);
             Picasso.with(getActivity().getBaseContext())
@@ -370,8 +370,21 @@ public class FragmentOpis extends Fragment {
         textView.setText(film.getIgralci());
             textView = ( TextView ) view.findViewById(R.id.opis);
         textView.setText(film.getOpis());
-
                 //video =/
+        if(film.getUrlVideo()!=null) {
+            textView = ( TextView ) view.findViewById(R.id.video);
+            textView.setVisibility(View.VISIBLE);
+            ImageView imageView2 = (ImageView) view.findViewById(R.id.youtube);
+            imageView2.setVisibility(View.VISIBLE);
+            imageView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri uriUrl = Uri.parse(film.getUrlVideo());
+                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                    startActivity(launchBrowser);
+                }
+            });
+        }
     }
 
     private class SinhronizacijaTask extends AsyncTask<String, Void, String> {

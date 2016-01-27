@@ -52,7 +52,10 @@ public class KritikeAdapter extends BaseAdapter {
 
         // Setting all values in listview
         avtor.setText(kritika.getAvtor());
-        mnenje.setText(kritika.getBesedilo());
+        if(kritika.getBesedilo().length()>500)
+            mnenje.setText(kritika.getBesedilo().substring(0,500)+"...");
+        else
+            mnenje.setText(kritika.getBesedilo());
 
         return vi;
     }

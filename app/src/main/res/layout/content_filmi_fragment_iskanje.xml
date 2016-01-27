@@ -3,27 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <TextView
         android:id="@+id/textView"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Iskanje" />
-    <EditText
-        android:layout_width="200dp"
+        android:text="Iskanje"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#235cd6"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/searchText"
-        android:layout_toEndOf="@+id/textView" />
-    <Button
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/buttonSearch"
-        android:background="@android:drawable/ic_menu_search"
-        android:layout_toEndOf="@+id/searchText" />
+        android:id="@+id/lin"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        >
+        <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchText" />
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/buttonSearch"
+            android:background="@android:drawable/ic_menu_search" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/listIskanje"
-        android:layout_below="@+id/searchText"
+        android:layout_below="@+id/lin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:divider="@color/list_divider"

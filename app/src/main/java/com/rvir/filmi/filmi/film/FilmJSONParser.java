@@ -45,14 +45,15 @@ public class FilmJSONParser {
                 film.setKategorije(" ");
 
             //video
+            String urlVideo = "";
             JSONArray jArray2 = jObj.getJSONObject("videos").getJSONArray("results");
             for(int j=0; j < jArray2.length(); j++) {
                 JSONObject jObject2 = jArray2.getJSONObject(j);
                 String key = jObject2.getString("key");
-                System.out.println("https://www.youtube.com/watch?v="+key);
+                urlVideo = "https://www.youtube.com/watch?v="+key;
             }
 
-            //film.setTrailer
+            film.setUrlVideo(urlVideo);
 
         } catch (JSONException e) {
             Log.e("JSONException", "Error: " + e.toString());

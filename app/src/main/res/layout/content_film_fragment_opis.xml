@@ -36,20 +36,19 @@
 
         <ImageView
             android:id="@+id/fave"
-            android:layout_width="50dp"
+            android:layout_width="40dp"
             android:layout_height="50dp"
             android:paddingTop="10dp"
-            android:paddingLeft="10dp"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/filmi_heart"
             android:paddingBottom="10dp"
             android:layout_below="@+id/rela2" />
 
         <ImageView
             android:id="@+id/notWatched"
-            android:layout_width="50dp"
+            android:layout_width="40dp"
             android:layout_height="50dp"
             android:paddingTop="10dp"
-            android:paddingLeft="10dp"
             android:src="@drawable/filmi_checkmark_empty"
             android:paddingBottom="10dp"
             android:layout_below="@+id/rela2"
@@ -57,10 +56,9 @@
 
         <ImageView
             android:id="@+id/wish"
-            android:layout_width="50dp"
+            android:layout_width="40dp"
             android:layout_height="50dp"
             android:paddingTop="10dp"
-            android:paddingLeft="10dp"
             android:src="@drawable/filmi_star_empty"
             android:paddingBottom="10dp"
             android:layout_below="@+id/rela2"
@@ -68,10 +66,9 @@
 
         <ImageView
             android:id="@+id/share"
-            android:layout_width="50dp"
+            android:layout_width="40dp"
             android:layout_height="50dp"
             android:paddingTop="10dp"
-            android:paddingLeft="10dp"
             android:src="@drawable/filmi_share"
             android:paddingBottom="10dp"
             android:layout_below="@+id/rela2"
@@ -93,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
                 android:text="Title"
-                />
+                android:textColor="#235cd6" />
 
             <TextView
                 android:id="@+id/categories"
@@ -117,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:text="Leto: "
-                    />
+                    android:textColor="#235cd6" />
 
                     <TextView
                         android:id="@+id/year"
@@ -144,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="13dp"
                 android:text="Ocena: "
-                />
+                android:textColor="#235cd6" />
 
             <TextView
                 android:id="@+id/ocena"
@@ -171,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:text="Režija: "
-                    />
+                    android:textColor="#235cd6" />
 
                 <TextView
                     android:id="@+id/rezija"
@@ -198,7 +195,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:text="Igralci: "
-                    />
+                    android:textColor="#235cd6" />
 
                 <TextView
                     android:id="@+id/igralci"
@@ -227,7 +224,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Opis"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"/>
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:textColor="#e58c38" />
 
         <TextView
             android:id="@+id/opis"
@@ -247,7 +245,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Video"
+            android:visibility="invisible"
+            android:textColor="#e58c38"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+    <ImageView
+        android:id="@+id/youtube"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:paddingTop="10dp"
+        android:src="@drawable/filmi_youtube"
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/video"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:clickable="true"/>
 
 
 

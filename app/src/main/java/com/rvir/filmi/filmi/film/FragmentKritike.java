@@ -69,6 +69,8 @@ public class FragmentKritike extends Fragment {
                 String ocena=filmids.pridobiMojoOceno(film.getIdFilmApi());
                 film.setMojaOcena(ocena);
 
+                //pridobi mojo kritiko, dodaj na zacetek seznama kritik
+
                 return film;
             } catch (IOException e) {
             }
@@ -100,6 +102,14 @@ public class FragmentKritike extends Fragment {
                 textView = ( TextView ) view.findViewById(R.id.ocena);
                 textView.setText(""+film.getOcena());
 
+                if(film.getMojaOcena()!=null){
+                    textView = ( TextView ) view.findViewById(R.id.mojaOcenaLabel);
+                    textView.setVisibility(View.VISIBLE);
+                    textView = ( TextView ) view.findViewById(R.id.mojaOcena);
+                    textView.setVisibility(View.VISIBLE);
+                    textView.setText("" + film.getMojaOcena());
+                }
+
                 TextView novaKritika = (TextView) view.findViewById(R.id.dodajKritiko);
                 novaKritika.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -115,6 +125,7 @@ public class FragmentKritike extends Fragment {
 
                 //kritike
 
+                //prva kritika na seznamu naj bo od uporabnika (ce obstaja seveda)
                 ListView listView = ( ListView ) view.findViewById(R.id.listKritike);
                 KritikeAdapter ka = new KritikeAdapter(getActivity(), film.getKritike());
                 listView.setAdapter(ka);

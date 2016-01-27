@@ -12,11 +12,12 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:tabIndicatorColor="@android:color/white"
+        android:background="#e58c38"
+        app:tabIndicatorColor="#235cd6"
         android:elevation="6dp"
         android:layout_below="@+id/toolbar"
-        app:tabTextColor="@android:color/white"
+        app:tabTextColor="#FFEDE3D9"
+        app:tabSelectedTextColor="@android:color/white"
         android:minHeight="?attr/actionBarSize" />
 
     <android.support.v4.view.ViewPager
