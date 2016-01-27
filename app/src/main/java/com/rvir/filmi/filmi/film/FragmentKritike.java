@@ -157,24 +157,14 @@ public class FragmentKritike extends Fragment {
                 });
 
                 ImageView slikica = (ImageView) view.findViewById(R.id.write);
-               if(!prijavljen){
+
+                Boolean ogl=seznamids.preveriCeJeFilmOgledan(idFilma);
+
+               if((!prijavljen)||(!ogl)){
                    slikica.setVisibility(View.GONE);
                    novaKritika.setVisibility(View.GONE);
                }
 
-               /* ArrayList<String> seznami = seznamids.vrniSeznameNaKaterihJeFilm(film.getIdFilma());
-                Log.i("velikost", seznami.size()+"");
-
-                if (prijavljen) {
-                    for (int i = 0; i < seznami.size(); i++) {
-                        Log.i("seznam:", seznami.get(i));
-                        if (seznami.get(i).equals("ogledan")){
-                            novaKritika.setVisibility(View.VISIBLE);
-                            slikica.setVisibility(View.VISIBLE);
-                        }
-
-                    }
-                }*/
                     PridobiKritikeTask task= new PridobiKritikeTask();
                     task.execute(idFilma + "");
 

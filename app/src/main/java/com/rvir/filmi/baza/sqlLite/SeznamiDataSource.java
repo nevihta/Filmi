@@ -153,13 +153,26 @@ public class SeznamiDataSource {
         ArrayList <String> seznami = new ArrayList<String>();
 
       // Log.i("cursor size", cursor.getCount()+"");
-       cursor.moveToFirst();
-       while (!cursor.isAfterLast()) {
-           seznami.add(cursor.getString(0));
-           cursor.moveToNext();
-       }
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            seznami.add(cursor.getString(0));
+            cursor.moveToNext();
+        }
         cursor.close();
         return seznami;
+    }
+
+    public boolean preveriCeJeFilmOgledan(int id){
+        Cursor cursor= database.rawQuery("select f." + SQLiteHelper.NASLOV + " from " + SQLiteHelper.TABELA_FILMI + " f, " +
+                SQLiteHelper.TABELA_SEZNAMI + " s where s." + SQLiteHelper.TK_ID_TIP + "=1 AND s." + SQLiteHelper.TK_ID_FILM + " = f." +
+                SQLiteHelper.ID_FILMA + " AND f." + SQLiteHelper.ID_FILMA_API + "=" + id, null);
+
+        if((cursor!=null)&&(cursor.getCount()>0))
+            return true;
+
+        return false;
+
+
     }
 
     public Film pridobiRandomFilm(){
