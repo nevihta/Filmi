@@ -48,7 +48,13 @@ public class PrijateljevSeznamActivity extends AppCompatActivity {
         seznamF=(ArrayList<SeznamAzure>)myIntent.getExtras().get("seznam");
 
         TextView naziv = (TextView) findViewById(R.id.textView);
-        naziv.setText(seznam);
+        if(seznam.equals("fave")) {
+            naziv.setText("Priljubljeni filmi"); System.out.print("priljubljeni");
+        }
+        else if(seznam.equals("watched"))
+            naziv.setText("Ogledani filmi");
+        else if(seznam.equals("wish"))
+            naziv.setText("Seznam želja");
 
         ListView listView = ( ListView ) findViewById(R.id.listFilmiPrijatelja);
         SeznamiPrijateljAdapter fa = new SeznamiPrijateljAdapter(PrijateljevSeznamActivity.this, seznamF);

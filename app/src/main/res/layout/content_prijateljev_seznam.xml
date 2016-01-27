@@ -6,13 +6,13 @@
 
     <TextView
         android:id="@+id/textView"
-        android:paddingTop="50dp"
+        android:paddingTop="20dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seznam osebe xyz"
+        android:text="Seznam prijatelja"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#235cd6"
         android:textStyle="bold"
