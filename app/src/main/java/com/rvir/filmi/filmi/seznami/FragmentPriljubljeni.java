@@ -133,10 +133,5 @@ public class FragmentPriljubljeni extends Fragment implements PriljubljeniInterf
 
     }
 
-    @Override
-    public void recommend(int idFilma) {
-        //intent, start activity to recommend to friend
-        System.out.println("recommend"+idFilma);
-    }
 
 }

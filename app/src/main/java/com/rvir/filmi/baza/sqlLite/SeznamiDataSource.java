@@ -29,11 +29,7 @@ public class SeznamiDataSource {
     public void close() {
         dbHelper.close();
     }
-    @Override
-    protected void finalize() throws Throwable {
-        this.close();
-        super.finalize();
-    }
+
     public Seznami pridobiVseSezname(){
         Seznami s = new Seznami();
         s.setOgledani(pridobiOgledane());
@@ -100,6 +96,7 @@ public class SeznamiDataSource {
     }
 
     public void dodajNaSeznam(int id, String seznam){
+        Log.i("v dodaj je", "seznam " + seznam);
         Cursor cursor =
                 database.rawQuery("select " + SQLiteHelper.ID_TIPA + " from " + SQLiteHelper.TABELA_TIP_SEZNAM + " where " + SQLiteHelper.NAZIV_T + " = '" + seznam + "'", null);
 
@@ -107,8 +104,8 @@ public class SeznamiDataSource {
         if ((cursor != null)&&(cursor.getCount()>0)){
             cursor.moveToFirst();
             idTipa = (Integer.parseInt(cursor.getString(0)));
-            cursor.close();
         }
+        cursor.close();
 
 
         ContentValues values = new ContentValues();
@@ -117,6 +114,7 @@ public class SeznamiDataSource {
         database.insert(SQLiteHelper.TABELA_SEZNAMI, null, values);
 
         if(seznam.equals("ogledan")) {
+            Log.i("v ogledan", "t");
 
             cursor =
                     database.rawQuery("select " + SQLiteHelper.ID_TIPA + " from " + SQLiteHelper.TABELA_TIP_SEZNAM + " where " + SQLiteHelper.NAZIV_T + " = 'wish'", null);
@@ -126,6 +124,7 @@ public class SeznamiDataSource {
                 idTipa = (Integer.parseInt(cursor.getString(0)));
                 cursor.close();
             }
+            Log.i("idTipa", idTipa+"");
 
             database.delete(SQLiteHelper.TABELA_SEZNAMI, SQLiteHelper.TK_ID_TIP + "=" + idTipa + " AND " + SQLiteHelper.TK_ID_FILM + "=" + id, null);
         }

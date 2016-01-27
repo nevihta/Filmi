@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.rvir.filmi.baza.beans.Kritika;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
@@ -27,6 +28,7 @@ import com.rvir.filmi.filmi.R;
 
 import java.net.MalformedURLException;
 import java.sql.Timestamp;
+import java.util.concurrent.ExecutionException;
 
 public class AddKritikaActivity extends AppCompatActivity  {
     int idFilmaApi = 0;
@@ -37,6 +39,9 @@ public class AddKritikaActivity extends AppCompatActivity  {
     String upIme;
     private FilmiDataSource filmids;
     private EditText mnenje;
+    String mojaOcena;
+    Boolean obstaja=false;
+    String idKritike=null;
 
     private MobileServiceClient mClient;
     private MobileServiceTable<Kritika> mKritikaTable;
@@ -81,49 +86,20 @@ public class AddKritikaActivity extends AppCompatActivity  {
 
         idFilmaApi = getIntent().getExtras().getInt("id");
         naslovF=getIntent().getExtras().getString("naslov");
-        String mojaOcena=getIntent().getExtras().getString("ocena");
+       // mojaOcena=getIntent().getExtras().getString("ocena", null);
+        mojaOcena=filmids.pridobiMojoOceno(idFilmaApi);
+        TextView n = (TextView) findViewById(R.id.title);
+        n.setText(naslovF);
 
         if(mojaOcena==null)
             mojaOcena="0.0";
 
-        TextView n = (TextView) findViewById(R.id.title);
-        n.setText(naslovF);
-
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         ratingBar.setRating(Float.parseFloat(mojaOcena));
 
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                SpremeniMojoOcenoTask task = new SpremeniMojoOcenoTask();
-                task.execute(ratingBar.getRating() + "");
-            }
-        });
-
         mnenje = (EditText) findViewById(R.id.editKritika);
-
-        Button shrani = (Button) findViewById(R.id.dodajKritikaButton);
-        shrani.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mnenje.getText().toString().trim().equals("")){
-                    Toast toast = Toast.makeText(getApplicationContext(), "Besedilo ne sme ostati prazno!", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                else{
-                    GetDodajKritikaTask task = new GetDodajKritikaTask();
-                    task.execute(ratingBar.getRating()+"",mnenje.getText().toString() );
-                }
-
-
-            }
-        });
-
-        if(!prijavljen){
-            mnenje.setVisibility(View.GONE);
-            shrani.setVisibility(View.GONE);
-            ((TextView) findViewById(R.id.opomba)).setVisibility(View.VISIBLE);
-        }
+        PreveriKritikoTask task=new PreveriKritikoTask();
+        task.execute(idUp, idFilmaApi + "");
 
     }
 
@@ -149,6 +125,7 @@ public class AddKritikaActivity extends AppCompatActivity  {
             System.out.println("mnenje: " + args[1]);
             System.out.println("apiFIlmaID: " + idFilmaApi);
 
+            filmids.spremeniMojoOceno(idFilmaApi, args[0]);
 
             Kritika k= new Kritika();
             k.setAvtor(upIme);
@@ -158,9 +135,11 @@ public class AddKritikaActivity extends AppCompatActivity  {
             k.setNaslovF(naslovF);
             java.util.Date date= new java.util.Date();
             Log.i("timestamp", new Timestamp(date.getTime())+"");
-            //k.setVnos(cas);
-            //Log.i("Cas je", k.getVnos().toString());
 
+            if(obstaja){
+                k.setIdKritika(idKritike);
+                mKritikaTable.update(k);
+            }
             mKritikaTable.insert(k);
 
             return "vBazi";
@@ -181,29 +160,66 @@ public class AddKritikaActivity extends AppCompatActivity  {
         }
     }
 
-    private class SpremeniMojoOcenoTask extends AsyncTask<String, Void, String> {
+    private class PreveriKritikoTask extends AsyncTask<String, Void, MobileServiceList<Kritika>> {
         private ProgressDialog pDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             // Showing progress dialog
-
-
         }
 
         @Override
-        protected String doInBackground(String... args) {
+        protected MobileServiceList<Kritika> doInBackground(String... args) {
+            //dodaj v bazo kritiko
+            MobileServiceList<Kritika> k=null;
+            try {
+                k=mKritikaTable.where().field("tk_id_avtorja").eq(args[0]).and().field("tk_id_filma").eq(Integer.parseInt(args[1])).execute().get();
 
-            System.out.println("st_zvezdic" + args[0]);
 
-            filmids.spremeniMojoOceno(idFilmaApi, args[0]);
-            return null;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            return k;
         }
 
         @Override
-        protected void onPostExecute(String vBazi) {
-            filmids.close();
+        protected void onPostExecute(MobileServiceList<Kritika> kritike) {
+
+
+            if(kritike.size()>0){
+                obstaja=true;
+                mnenje.setText(kritike.get(0).getBesedilo());
+                idKritike=kritike.get(0).getIdKritika();
+
+            }
+
+            Button shrani = (Button) findViewById(R.id.dodajKritikaButton);
+            shrani.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mnenje.getText().toString().trim().equals("")){
+                        Toast toast = Toast.makeText(getApplicationContext(), "Besedilo ne sme ostati prazno!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else{
+                        GetDodajKritikaTask task = new GetDodajKritikaTask();
+                        task.execute(ratingBar.getRating()+"",mnenje.getText().toString() );
+                    }
+
+
+                }
+            });
+
+           /* if(!prijavljen){
+                mnenje.setVisibility(View.GONE);
+                shrani.setVisibility(View.GONE);
+                ((TextView) findViewById(R.id.opomba)).setVisibility(View.VISIBLE);
+            }*/
+
+
 
         }
     }

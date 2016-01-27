@@ -30,11 +30,6 @@ public class FilmiDataSource {
         dbHelper.close();
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        this.close();
-        super.finalize();
-    }
 
     public Film pridobiFilm(int id){
 

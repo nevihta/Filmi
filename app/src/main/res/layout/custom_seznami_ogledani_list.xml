@@ -40,14 +40,6 @@
             android:layout_weight="1"
             />
 
-        <ImageView
-            android:id="@+id/share"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:paddingTop="20dp"
-            android:paddingLeft="10dp"
-            android:src="@drawable/filmi_share"
-            android:layout_alignParentTop="true" />
 
         <ImageView
             android:id="@+id/write"

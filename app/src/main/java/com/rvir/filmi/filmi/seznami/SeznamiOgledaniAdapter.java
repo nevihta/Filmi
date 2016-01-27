@@ -2,6 +2,7 @@ package com.rvir.filmi.filmi.seznami;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rvir.filmi.baza.beans.Film;
+import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class SeznamiOgledaniAdapter extends BaseAdapter {
     private Activity activity;
     private ArrayList<Film> data;
     private static LayoutInflater inflater = null;
+    private boolean prijavljen=false;
 
     public SeznamiOgledaniAdapter(Activity a, ArrayList<Film> d, FragmentOgledani f) {
         activity = a;
@@ -44,10 +47,15 @@ public class SeznamiOgledaniAdapter extends BaseAdapter {
         if (convertView == null)
             vi = inflater.inflate(R.layout.custom_seznami_ogledani_list, null);
 
+        SharedPreferences sharedpreferences = activity.getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
+        if(sharedpreferences.getString("idUporabnika", null)!=null)
+                 prijavljen=true;
+
+
         TextView title = (TextView) vi.findViewById(R.id.title);
         TextView kategorije = (TextView) vi.findViewById(R.id.kategorije);
 
-        Film film = data.get(position);
+        final Film film = data.get(position);
 
         // Setting all values in listview
         title.setText(film.getNaslov());
@@ -60,31 +68,25 @@ public class SeznamiOgledaniAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View view) {
-                ogledaniInterface.remove(Integer.parseInt(view.getTag(R.string.idFilma).toString()),Integer.parseInt(view.getTag(R.string.idFilmaApi).toString()));
+                ogledaniInterface.remove(Integer.parseInt(view.getTag(R.string.idFilma).toString()), Integer.parseInt(view.getTag(R.string.idFilmaApi).toString()));
             }
         });
 
+
         ImageView write = (ImageView) vi.findViewById(R.id.write);
-        write.setTag(new Integer(film.getIdFilma()));
         write.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                System.out.println(view.getTag().toString());
-                ogledaniInterface.writeReview(Integer.parseInt(view.getTag().toString()));
+                ogledaniInterface.writeReview(film.getIdFilmApi(), film.getNaslov());
             }
         });
 
-        ImageView share = (ImageView) vi.findViewById(R.id.share);
-        share.setTag(new Integer(film.getIdFilma()));
-        share.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                System.out.println(view.getTag().toString());
-                ogledaniInterface.recommend(Integer.parseInt(view.getTag().toString()));
-            }
-        });
+
+        if(!prijavljen){
+            write.setVisibility(View.GONE);
+        }
 
         return vi;
     }

@@ -47,7 +47,7 @@ public class SeznamiWishlistAdapter extends BaseAdapter {
         TextView title = (TextView) vi.findViewById(R.id.title);
         TextView kategorije = (TextView) vi.findViewById(R.id.kategorije);
 
-        Film film = data.get(position);
+        final Film film = data.get(position);
 
         // Setting all values in listview
         title.setText(film.getNaslov());
@@ -60,18 +60,16 @@ public class SeznamiWishlistAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View view) {
-                wishlistInterface.remove(Integer.parseInt(view.getTag(R.string.idFilma).toString()),Integer.parseInt(view.getTag(R.string.idFilmaApi).toString()));
+                wishlistInterface.remove(Integer.parseInt(view.getTag(R.string.idFilma).toString()), Integer.parseInt(view.getTag(R.string.idFilmaApi).toString()));
             }
         });
 
         ImageView ogledan = (ImageView) vi.findViewById(R.id.ogledan);
-        ogledan.setTag(new Integer(film.getIdFilma()));
         ogledan.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                System.out.println(view.getTag().toString());
-                wishlistInterface.putOnOgledani(Integer.parseInt(view.getTag().toString()));
+                wishlistInterface.putOnOgledani(film);
             }
         });
 

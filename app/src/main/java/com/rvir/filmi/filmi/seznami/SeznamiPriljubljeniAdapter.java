@@ -2,6 +2,7 @@ package com.rvir.filmi.filmi.seznami;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rvir.filmi.baza.beans.Film;
+import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
 
 import java.util.ArrayList;
@@ -64,16 +66,6 @@ public class SeznamiPriljubljeniAdapter extends BaseAdapter {
             }
         });
 
-        ImageView share = (ImageView) vi.findViewById(R.id.share);
-        share.setTag(new Integer(film.getIdFilma()));
-        share.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                System.out.println(view.getTag().toString());
-                priljubljeniInterface.recommend(Integer.parseInt(view.getTag().toString()));
-            }
-        });
 
         return vi;
     }

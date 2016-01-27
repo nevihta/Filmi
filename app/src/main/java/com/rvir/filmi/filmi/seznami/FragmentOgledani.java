@@ -1,7 +1,9 @@
 package com.rvir.filmi.filmi.seznami;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -12,16 +14,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.rvir.filmi.baza.beans.Film;
+import com.rvir.filmi.baza.beans.Kritika;
+import com.rvir.filmi.baza.beans.Prijatelji;
+import com.rvir.filmi.baza.beans.Priporoci;
+import com.rvir.filmi.baza.beans.SeznamAzure;
 import com.rvir.filmi.baza.sqlLite.FilmiDataSource;
 import com.rvir.filmi.baza.sqlLite.PotrebnoSinhroniziratDataSource;
 import com.rvir.filmi.baza.sqlLite.SeznamiDataSource;
 import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
+import com.rvir.filmi.filmi.film.AddKritikaActivity;
 import com.rvir.filmi.filmi.film.FilmActivity;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public class FragmentOgledani extends Fragment implements OgledaniInterface{
@@ -34,6 +47,8 @@ public class FragmentOgledani extends Fragment implements OgledaniInterface{
     private boolean prijavljen=false;
     private boolean registriran=false;
 
+    private MobileServiceClient mClient;
+    private MobileServiceTable<Kritika> mKritikaTable;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,8 +56,9 @@ public class FragmentOgledani extends Fragment implements OgledaniInterface{
         view =  inflater.inflate(R.layout.content_seznami_fragment_ogledani, container, false);
 
         SharedPreferences sharedpreferences = getActivity().getSharedPreferences(MainActivity.seja, Context.MODE_PRIVATE);
-        if(sharedpreferences.getString("idUporabnika", null)!=null)
-            prijavljen=true;
+        if(sharedpreferences.getString("idUporabnika", null)!=null) {
+            prijavljen = true;
+        }
 
         filmids=new FilmiDataSource(getContext());
         filmids.open();
@@ -68,11 +84,7 @@ public class FragmentOgledani extends Fragment implements OgledaniInterface{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Showing progress dialog
-            //pDialog = new ProgressDialog(getActivity());
-            //pDialog.setMessage("Prosimo, počakajte...");
-            //pDialog.setCancelable(false);
-            //pDialog.show();
+
         }
 
         @Override
@@ -81,23 +93,12 @@ public class FragmentOgledani extends Fragment implements OgledaniInterface{
             ogledaniFilmi = new ArrayList<>();
             ogledaniFilmi=seznamids.pridobiOgledane();
 
-          /*  Film f = new Film();
-            f.setNaslov("title1"); f.setKategorije("Comedy, Science fiction, Drama, Action"); f.setIdFilmApi(140607);
-            ogledaniFilmi.add(f);
-
-            Film c = new Film();
-            c.setNaslov("title2"); c.setKategorije("Comedy, Science fiction, Drama, Action, Fantasy"); c.setIdFilmApi(206647);
-            ogledaniFilmi.add(c);*/
-
             return ogledaniFilmi;
         }
 
         @Override
         protected void onPostExecute(ArrayList<Film> result) {
-            //if(pDialog.isShowing())
-             //   pDialog.dismiss();
-            //izpis rezultatov
-            //if(result.size()>0) {
+
                 ListView listView = ( ListView ) view.findViewById(R.id.listOgledani);
                 SeznamiOgledaniAdapter spa = new SeznamiOgledaniAdapter(getActivity(), ogledaniFilmi, FragmentOgledani.this);
                 listView.setAdapter(spa);
@@ -140,15 +141,13 @@ public class FragmentOgledani extends Fragment implements OgledaniInterface{
     }
 
     @Override
-    public void writeReview(int idFilma) {
-        //intent, start activity to write review
+    public void writeReview(int idFilma, String naslovF) {
         System.out.println("write review"+idFilma);
-    }
+        Intent myIntent = new Intent(view.getContext(), AddKritikaActivity.class);
+        myIntent.putExtra("id", (int) idFilma);
+        myIntent.putExtra("naslov", naslovF);
+        startActivity(myIntent);
 
-    @Override
-    public void recommend(int idFilma) {
-        //intent, start activity to recommend to friend
-        System.out.println("recommend"+idFilma);
     }
 
 

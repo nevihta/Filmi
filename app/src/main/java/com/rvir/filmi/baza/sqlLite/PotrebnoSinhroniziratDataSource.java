@@ -28,11 +28,7 @@ public class PotrebnoSinhroniziratDataSource {
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
-    @Override
-    protected void finalize() throws Throwable {
-        this.close();
-        super.finalize();
-    }
+
     public void close() {
         dbHelper.close();
     }

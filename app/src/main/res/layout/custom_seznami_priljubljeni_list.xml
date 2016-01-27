@@ -32,16 +32,6 @@
             android:text="kategorije"
             />
 
-        <ImageView
-            android:id="@+id/share"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:src="@drawable/filmi_share"
-            android:paddingBottom="10dp"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/delete" />
 
         <ImageView
             android:id="@+id/delete"

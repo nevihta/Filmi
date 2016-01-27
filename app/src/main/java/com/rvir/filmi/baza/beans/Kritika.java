@@ -39,7 +39,7 @@ public class Kritika  implements Serializable {
     }
 
 
-    public String getIdKritikaApi() {
+    public String getIdKritika() {
         return idKritika;
     }
 
