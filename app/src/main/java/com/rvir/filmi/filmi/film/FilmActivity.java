@@ -51,6 +51,13 @@ public class FilmActivity extends AppCompatActivity {
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        Intent i = getIntent();
+        int tabToOpen = i.getIntExtra("OpenTab", -1);
+        if (tabToOpen!=-1) {
+            viewPager.setCurrentItem(tabToOpen);
+        }
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

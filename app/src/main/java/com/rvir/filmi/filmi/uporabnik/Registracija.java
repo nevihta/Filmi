@@ -119,6 +119,9 @@ public class Registracija extends AppCompatActivity {
             MobileServiceList<Uporabniki> result=null;
             try {
                  result= mUporabnikiTable.where().field("email").eq(mail[0]).execute().get();
+                if(result.size()==0)
+                    result= mUporabnikiTable.where().field("uporabnisko_ime").eq(mail[0]).execute().get();
+
             } catch (Exception e) { }
             return result;
         }
@@ -140,12 +143,9 @@ public class Registracija extends AppCompatActivity {
 
                    RegistracijaTask task = new RegistracijaTask();
                    task.execute(u);
-
-                   Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                   startActivity(intent);
                }
             else{
-                   Toast toast = Toast.makeText(getApplicationContext(), "Email že obstaja!", Toast.LENGTH_SHORT);
+                   Toast toast = Toast.makeText(getApplicationContext(), "Email ali uporabniško ime že obstaja!", Toast.LENGTH_SHORT);
                    toast.show();
                }
 
@@ -179,6 +179,7 @@ public class Registracija extends AppCompatActivity {
                 editor.commit();
                 sinhds.registriraj();
 
+
             } catch (Exception e) { }
             return id;
         }
@@ -191,6 +192,8 @@ public class Registracija extends AppCompatActivity {
             sinhds.close();
             SinhronizacijaTask task = new SinhronizacijaTask();
             task.execute(id);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         }
     }
 

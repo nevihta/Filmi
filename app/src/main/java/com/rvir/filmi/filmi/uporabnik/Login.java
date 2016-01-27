@@ -204,7 +204,7 @@ public class Login extends AppCompatActivity {
                     mSeznamiTable.insert(dodaj.get(i));
                     if(dodaj.get(i).getTkIdTipa()==1){
                         MobileServiceList<SeznamAzure> s1;
-                        s1=mSeznamiTable.where().field("tk_id_tipa").eq(3).and().field("tk_id_filma").eq(odstrani.get(i).getTkIdFilma()).and().field("tk_id_uporabnika").eq(odstrani.get(i).getTkIdUporabnika()).execute().get();
+                        s1=mSeznamiTable.where().field("tk_id_tipa").eq(3).and().field("tk_id_filma").eq(dodaj.get(i).getTkIdFilma()).and().field("tk_id_uporabnika").eq(dodaj.get(i).getTkIdUporabnika()).execute().get();
                         mSeznamiTable.delete(s1.get(0));
                     }
 
@@ -214,10 +214,15 @@ public class Login extends AppCompatActivity {
                     mSeznamiTable.delete(result.get(0));
                 }
 
-                sinhds.izbrisiNaCakanju();
-                sinhds.close();
+
 
             } catch (Exception e) { }
+            finally {
+                sinhds.izbrisiNaCakanju();
+                sinhds.close();
+            }{
+
+            }
             return null;
         }
 

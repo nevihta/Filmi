@@ -24,6 +24,7 @@ import com.rvir.filmi.baza.beans.SeznamAzure;
 import com.rvir.filmi.baza.beans.Uporabniki;
 import com.rvir.filmi.filmi.MainActivity;
 import com.rvir.filmi.filmi.R;
+import com.rvir.filmi.filmi.film.AddKritikaActivity;
 import com.rvir.filmi.filmi.film.FilmActivity;
 import com.rvir.filmi.filmi.seznami.PrijateljevSeznamActivity;
 import com.rvir.filmi.filmi.seznami.SeznamiActivity;
@@ -389,11 +390,19 @@ public class ProfilActivity extends AppCompatActivity {
             kritika1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
- /*                 int idFilma = getIdFilmApi();
-                    Intent myIntent = new Intent(v.getContext(), FilmActivity.class);
-                    myIntent.putExtra("id", (int) idFilma);
-                    startActivity(myIntent);
- */
+                    if(idProfila.equals(idUp)){
+                        Intent myIntent = new Intent(v.getContext(), AddKritikaActivity.class);
+                        myIntent.putExtra("id", (int) result.get(0).getTkIdFilma());
+                        myIntent.putExtra("naslov", result.get(0).getNaslovF());
+                        startActivity(myIntent);
+                    }else{
+                        Intent myIntent = new Intent(v.getContext(), FilmActivity.class);
+                        myIntent.putExtra("OpenTab", 2);
+                        myIntent.putExtra("id", (int) result.get(0).getTkIdFilma());
+                        startActivity(myIntent);
+
+                    }
+
                 }
             });
 
@@ -401,14 +410,20 @@ public class ProfilActivity extends AppCompatActivity {
             kritika2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
- /*                 int idFilma = getIdFilmApi();
-                    Intent myIntent = new Intent(v.getContext(), FilmActivity.class);
-                    myIntent.putExtra("id", (int) idFilma);
-                    startActivity(myIntent);
- */               }
-            });
+                    if(idProfila.equals(idUp)){
+                        Intent myIntent = new Intent(v.getContext(), AddKritikaActivity.class);
+                        myIntent.putExtra("id", (int) result.get(1).getTkIdFilma());
+                        myIntent.putExtra("naslov", result.get(1).getNaslovF());
+                        startActivity(myIntent);
+                    }else{
+                        Intent myIntent = new Intent(v.getContext(), FilmActivity.class);
+                        myIntent.putExtra("id", (int) result.get(1).getTkIdFilma());
+                        myIntent.putExtra("OpenTab", 2);
+                        startActivity(myIntent);
 
-            //kritike?? manjka stran...
+                    }
+               }
+            });
 
 
             TextView noneKritik= (TextView) findViewById(R.id.noneKritik);

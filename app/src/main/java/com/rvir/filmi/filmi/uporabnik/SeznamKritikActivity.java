@@ -58,6 +58,7 @@ public class SeznamKritikActivity extends AppCompatActivity {
                     int idFilma = result.get(position).getTkIdFilma();
                     System.out.print(idFilma);
                     Intent myIntent = new Intent(view.getContext(), FilmActivity.class);
+                    myIntent.putExtra("OpenTab", 2);
                     myIntent.putExtra("id", (int) idFilma);
                     startActivity(myIntent);}
             });

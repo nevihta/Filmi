@@ -209,12 +209,14 @@ public class SeznamiDataSource {
         film.setIdFilmApi(Integer.parseInt(cursor.getString(1)));
         film.setNaslov(cursor.getString(2));
         film.setLetoIzida(Integer.parseInt(cursor.getString(3)));
-        film.setIgralci(cursor.getString(4));
-        film.setReziserji(cursor.getString(5));
-        film.setOpis(cursor.getString(6));
-        film.setOcena(cursor.getString(7));
-        film.setMojaOcena(cursor.getString(8));
-        film.setUrlDoSlike(cursor.getString(9));
+        film.setKategorije(cursor.getString(4));
+        film.setIgralci(cursor.getString(5));
+        film.setReziserji(cursor.getString(6));
+        film.setOpis(cursor.getString(7));
+        film.setOcena(cursor.getString(8));
+        film.setMojaOcena(cursor.getString(9));
+        film.setUrlDoSlike(cursor.getString(10));
+        film.setUrlVideo(cursor.getString(11));
 
         return film;
     }
