@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,7 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/relative">
-
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,7 +91,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:text="Title"
                 android:textColor="#235cd6" />
 
             <TextView
@@ -99,9 +100,7 @@
                 android:paddingRight="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10dp"
-                android:text="Kategorije"
-                />
+                android:textSize="10dp" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
@@ -124,8 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="13dp"
-                        android:layout_toEndOf="@+id/yearLabel"
-                        android:text="Leto" />
+                        android:layout_toEndOf="@+id/yearLabel" />
 
             </LinearLayout>
 
@@ -151,8 +149,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/ocenaLabel"
-                android:textSize="13dp"
-                android:text="ocena: " />
+                android:textSize="13dp" />
 
         </LinearLayout>
 
@@ -178,8 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@+id/rezijaLabel"
-                    android:textSize="13dp"
-                    android:text="rezija " />
+                    android:textSize="13dp" />
 
             </LinearLayout>
 
@@ -205,8 +201,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@+id/igralciLabel"
-                    android:textSize="13dp"
-                    android:text="igralci " />
+                    android:textSize="13dp" />
 
             </LinearLayout>
 
@@ -233,8 +228,7 @@
             android:paddingLeft="10dp"
             android:layout_below="@+id/labelopis"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opis" />
+            android:layout_height="wrap_content" />
 
 
         <TextView
@@ -264,3 +258,4 @@
 
 
 </RelativeLayout>
+</ScrollView>
