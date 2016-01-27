@@ -43,7 +43,7 @@ public class SeznamiPrijateljAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         if (convertView == null)
-            vi = inflater.inflate(R.layout.custom_filmi_list, null);
+            vi = inflater.inflate(R.layout.custom_seznam_prijatelja_list, null);
 
         TextView title = (TextView) vi.findViewById(R.id.txt);
         ImageView imageIcon = (ImageView) vi.findViewById(R.id.flag);
