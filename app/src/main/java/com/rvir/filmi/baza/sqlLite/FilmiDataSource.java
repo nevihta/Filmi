@@ -86,7 +86,7 @@ public class FilmiDataSource {
     }
 
     public String pridobiMojoOceno(int idFilma){
-        String ocena="0.0";
+        String ocena=null;
         Cursor cursor =
                 database.rawQuery("SELECT " + SQLiteHelper.MOJA_OCENA + " from " + SQLiteHelper.TABELA_FILMI + " where "+ SQLiteHelper.ID_FILMA_API +" = " + idFilma, null);
 
